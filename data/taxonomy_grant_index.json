@@ -1,0 +1,923 @@
+[
+  {
+    "theme_id": "THE-01",
+    "theme": "Human\u2013AI Cognition & Performance",
+    "subtopic_count": 65,
+    "high_priority_count": 25,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Cognitive Performance",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "AI Assistance Calibration",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Neurodiversity and AI",
+        "subtopic_count": 9
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Human\u2013AI Collaboration",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Learning Science and Adaptive Education",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Reading and Language Development",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Mathematical Learning",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-008",
+        "topic": "Human Performance and Wellbeing",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Human\u2013AI Cognition & Performance",
+      "queries": [
+        "human-centered AI cognition working memory executive function",
+        "neurodiversity AI assistance cognitive load human factors",
+        "explainable AI human performance learning science adaptive education",
+        "neuroergonomics AI collaboration skill preservation"
+      ],
+      "for_codes_au": [
+        "46",
+        "52",
+        "39"
+      ],
+      "horizon_clusters": [
+        "CL4 HUMAN",
+        "CL1 HEALTH"
+      ],
+      "us_agencies": [
+        "NSF IIS/CHS",
+        "NIH BRAIN",
+        "NIMH",
+        "IES"
+      ],
+      "uk_bodies": [
+        "UKRI EPSRC",
+        "ESRC",
+        "AHRC"
+      ]
+    },
+    "top_keywords": [
+      "adaptation",
+      "adaptive",
+      "adaptive-difficulty",
+      "adaptive-practice",
+      "adhd",
+      "adhd-ai-performance-patterns",
+      "adjustment",
+      "agent",
+      "agent-collaboration-with-humans",
+      "ai-assistance-calibration",
+      "allocation",
+      "assistance",
+      "atrophy",
+      "attention",
+      "attention-regulation",
+      "audhd",
+      "audhd-dual-mode-support",
+      "autism",
+      "autism-ai-interaction-patterns",
+      "aware",
+      "awareness",
+      "balance",
+      "balancing",
+      "burnout",
+      "burnout-prevention",
+      "calibration",
+      "cognitive",
+      "cognitive-load-balancing",
+      "cognitive-performance",
+      "collaboration",
+      "collaborative",
+      "collaborative-workflow-design",
+      "comprehension",
+      "conceptual",
+      "conceptual-understanding",
+      "conditions",
+      "confidence",
+      "confidence-aware-assistance",
+      "context",
+      "context-sensitive-support-levels"
+    ]
+  },
+  {
+    "theme_id": "THE-02",
+    "theme": "Child, Family & Development",
+    "subtopic_count": 56,
+    "high_priority_count": 56,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Digital Child Protection",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Developmental Safety",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Digital Parenting",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Education and Schooling",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Child Wellbeing",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Family Systems",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Early Intervention",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Child, Family & Development",
+      "queries": [
+        "digital child protection AI parenting early intervention",
+        "child wellbeing developmental safety AI education",
+        "neurodevelopmental AI family systems school"
+      ],
+      "for_codes_au": [
+        "39",
+        "52",
+        "42"
+      ],
+      "horizon_clusters": [
+        "CL1 HEALTH",
+        "CL2"
+      ],
+      "us_agencies": [
+        "NIH NICHD",
+        "NSF",
+        "IES",
+        "CDC"
+      ],
+      "uk_bodies": [
+        "UKRI ESRC",
+        "NIHR"
+      ]
+    },
+    "top_keywords": [
+      "academic",
+      "academic-integrity",
+      "age-appropriate-ai-interaction",
+      "age-assurance",
+      "agreements",
+      "ai-assisted-triage",
+      "ai-parenting-assistants",
+      "appropriate",
+      "around",
+      "assessment",
+      "assessment-integrity",
+      "assistants",
+      "assisted",
+      "assurance",
+      "behaviour",
+      "bullying",
+      "bullying-and-cyberbullying",
+      "care",
+      "care-coordination",
+      "centred",
+      "child",
+      "child-family-development",
+      "child-mental-health",
+      "child-physical-health",
+      "child-rights",
+      "child-safe-ai-companions",
+      "child-wellbeing",
+      "circadian",
+      "classification",
+      "classroom",
+      "classroom-ai-integration",
+      "cognitive",
+      "cognitive-development-protection",
+      "communication",
+      "companions",
+      "confidence",
+      "confidence-and-self-efficacy",
+      "conflict",
+      "conflict-resolution-around-technology",
+      "control"
+    ]
+  },
+  {
+    "theme_id": "THE-03",
+    "theme": "Social Signal & Information Integrity",
+    "subtopic_count": 56,
+    "high_priority_count": 24,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Social Signal Integrity",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Platform Behaviour",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Manipulation and Influence",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Reputation and Trust Systems",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Information Quality",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Provenance and Authenticity",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Community Health",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Social Signal & Information Integrity",
+      "queries": [
+        "information integrity misinformation AI provenance authenticity",
+        "platform behaviour manipulation influence trust systems",
+        "social signal integrity fact-checking AI"
+      ],
+      "for_codes_au": [
+        "46",
+        "47",
+        "44"
+      ],
+      "horizon_clusters": [
+        "CL4",
+        "CL2",
+        "CL3"
+      ],
+      "us_agencies": [
+        "NSF SaTC",
+        "DARPA",
+        "NSF CISE"
+      ],
+      "uk_bodies": [
+        "UKRI EPSRC",
+        "AHRC"
+      ]
+    },
+    "top_keywords": [
+      "abuse",
+      "addictive",
+      "addictive-design-patterns",
+      "adversarial",
+      "adversarial-reputation-attacks",
+      "algorithmic",
+      "algorithmic-amplification",
+      "amplification",
+      "analysis",
+      "assessment",
+      "attacks",
+      "attribution",
+      "authenticity",
+      "authenticity-verification",
+      "behaviour",
+      "behavioural",
+      "behavioural-pattern-mapping",
+      "belonging",
+      "bot-and-sockpuppet-detection",
+      "campaigns",
+      "chain",
+      "chain-of-custody-for-information",
+      "civic",
+      "claim",
+      "claim-confidence-scoring",
+      "cohesion",
+      "collective",
+      "collective-intelligence",
+      "community",
+      "community-dynamics",
+      "community-health",
+      "community-level-signal-health",
+      "community-reputation",
+      "community-resilience",
+      "confidence",
+      "consistency",
+      "content",
+      "content-moderation-dynamics",
+      "content-provenance",
+      "coordinated"
+    ]
+  },
+  {
+    "theme_id": "THE-04",
+    "theme": "Consent, Identity & Human Agency",
+    "subtopic_count": 64,
+    "high_priority_count": 64,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Digital Identity",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Consent Infrastructure",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Human Agency",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Delegation and Authority",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Credential and Trust Exchange",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Digital Wallets and Personal Data",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Identity Sovereignty",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-008",
+        "topic": "Access and Decision Rights",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Consent, Identity & Human Agency",
+      "queries": [
+        "digital identity wallet consent infrastructure human agency",
+        "eIDAS digital credentials trust exchange privacy",
+        "identity sovereignty personal data AI agency"
+      ],
+      "for_codes_au": [
+        "46",
+        "48",
+        "44"
+      ],
+      "horizon_clusters": [
+        "CL4 DIGITAL",
+        "DIGITAL Europe identity"
+      ],
+      "us_agencies": [
+        "NSF SaTC",
+        "NIST",
+        "NSF"
+      ],
+      "uk_bodies": [
+        "UKRI EPSRC",
+        "Innovate UK"
+      ]
+    },
+    "top_keywords": [
+      "access",
+      "access-and-decision-rights",
+      "access-appeals",
+      "access-decision-models",
+      "across",
+      "agency",
+      "agency-measurement",
+      "agency-under-cognitive-vulnerability",
+      "agent",
+      "agent-authority-boundaries",
+      "appeals",
+      "auditability",
+      "auditability-of-access-decisions",
+      "authorisation",
+      "authority",
+      "authority-expiry",
+      "authority-revocation",
+      "automation",
+      "autonomy",
+      "autonomy-preservation",
+      "based",
+      "biological",
+      "biological-digital-identity-boundaries",
+      "boundaries",
+      "business",
+      "business-wallets",
+      "capability",
+      "capability-based-authority",
+      "central",
+      "choice",
+      "coercion",
+      "coercion-detection",
+      "cognitive",
+      "comprehension",
+      "consent",
+      "consent-across-time",
+      "consent-comprehension",
+      "consent-for-secondary-use",
+      "consent-identity-agency",
+      "consent-infrastructure"
+    ]
+  },
+  {
+    "theme_id": "THE-05",
+    "theme": "Biological & Neural Integrity",
+    "subtopic_count": 56,
+    "high_priority_count": 56,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Neurotechnology and BCI",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Neural Privacy",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Cognitive Liberty",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Neurosecurity",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Biological Identity",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Human Augmentation",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Biological Human\u2013AI Integrity",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Biological & Neural Integrity",
+      "queries": [
+        "BCI neural privacy neurosecurity cognitive liberty",
+        "brain-computer interface human augmentation neural integrity",
+        "neurotechnology ethics AI brain health"
+      ],
+      "for_codes_au": [
+        "32",
+        "46",
+        "52"
+      ],
+      "horizon_clusters": [
+        "CL1 HEALTH",
+        "CL4 DIGITAL-EMERGING"
+      ],
+      "us_agencies": [
+        "NIH BRAIN",
+        "NSF",
+        "DARPA"
+      ],
+      "uk_bodies": [
+        "UKRI MRC",
+        "EPSRC"
+      ]
+    },
+    "top_keywords": [
+      "accessibility",
+      "adaptation",
+      "adversarial",
+      "adversarial-neural-inputs",
+      "ai-induced-stress-and-arousal",
+      "arousal",
+      "assistive",
+      "assistive-augmentation",
+      "augmentation",
+      "augmentation-dependency",
+      "augmentation-equity",
+      "bci-accessibility",
+      "bci-calibration",
+      "bci-safety",
+      "bci-threat-modelling",
+      "behavioural",
+      "behavioural-biometrics",
+      "biological",
+      "biological-human-ai-integrity",
+      "biological-identity",
+      "biological-identity-drift",
+      "biological-integrity-under-ai-mediation",
+      "biological-neural-integrity",
+      "biological-safety-limits",
+      "biometric",
+      "biometric-identity",
+      "biometric-revocability",
+      "biometrics",
+      "boundary",
+      "brain",
+      "calibration",
+      "cognitive",
+      "cognitive-due-process",
+      "cognitive-enhancement",
+      "cognitive-liberty",
+      "compromise",
+      "computer",
+      "consent",
+      "cross",
+      "cross-modal-biological-identity"
+    ]
+  },
+  {
+    "theme_id": "THE-06",
+    "theme": "Institutional Safety, Governance & Trust",
+    "subtopic_count": 72,
+    "high_priority_count": 72,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "AI Assurance",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Audit and Evidence",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Runtime Governance",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Ethics by Design",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Standards and Regulation",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Policy Adaptation and Governance Lag",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Institutional Trust",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-008",
+        "topic": "Public Sector AI Capability",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-009",
+        "topic": "Constitutional Runtime",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Institutional Safety, Governance & Trust",
+      "queries": [
+        "AI assurance audit evidence institutional trust governance",
+        "AI ethics by design runtime governance public sector AI",
+        "constitutional AI policy adaptation safety"
+      ],
+      "for_codes_au": [
+        "46",
+        "44",
+        "48"
+      ],
+      "horizon_clusters": [
+        "CL4",
+        "CL3",
+        "CL2"
+      ],
+      "us_agencies": [
+        "NSF",
+        "NIST AI RMF",
+        "NSF SaTC"
+      ],
+      "uk_bodies": [
+        "UKRI",
+        "DSIT",
+        "EPSRC"
+      ]
+    },
+    "top_keywords": [
+      "accountability",
+      "accountability-mechanisms",
+      "adaptation",
+      "adaptive",
+      "adaptive-regulation",
+      "adoption",
+      "ai-assurance",
+      "ai-standards-mapping",
+      "ai-system-assurance",
+      "assessment",
+      "assurance",
+      "assurance-case-design",
+      "assurance-confidence-scoring",
+      "assurance-evidence",
+      "audit",
+      "audit-and-evidence",
+      "audit-export-packs",
+      "audit-trails",
+      "authority",
+      "authority-and-identity-doctrine",
+      "automated",
+      "beneficence",
+      "beneficence-and-public-value",
+      "bias",
+      "bias-and-fairness",
+      "boundaries",
+      "capability",
+      "capability-governance",
+      "case",
+      "certification",
+      "certification-schemes",
+      "citizen",
+      "citizen-rights-in-automated-services",
+      "completeness",
+      "compliance",
+      "confidence",
+      "conformity",
+      "conformity-assessment",
+      "constitutional",
+      "constitutional-runtime"
+    ]
+  },
+  {
+    "theme_id": "THE-07",
+    "theme": "Cognitive, Creative & Cultural Humanity",
+    "subtopic_count": 56,
+    "high_priority_count": 56,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Creativity and Augmentation",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Human Distinctiveness",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Culture and Cultural Memory",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Narrative, Story and Meaning",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Knowledge Systems",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Human Capability Preservation",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Creative and Cultural Rights",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Cognitive, Creative & Cultural Humanity",
+      "queries": [
+        "creativity AI cultural memory human distinctiveness",
+        "knowledge systems narrative cultural rights AI",
+        "human capability preservation creative augmentation"
+      ],
+      "for_codes_au": [
+        "36",
+        "47",
+        "39"
+      ],
+      "horizon_clusters": [
+        "CL2",
+        "CL4 HUMAN"
+      ],
+      "us_agencies": [
+        "NEH",
+        "NSF",
+        "NEA"
+      ],
+      "uk_bodies": [
+        "AHRC",
+        "UKRI"
+      ]
+    },
+    "top_keywords": [
+      "action",
+      "adaptation",
+      "ai-assisted-ideation",
+      "assessment",
+      "assisted",
+      "attribution",
+      "augmentation",
+      "authenticity",
+      "authenticity-in-narrative",
+      "authorship",
+      "authorship-and-attribution",
+      "automation",
+      "beyond",
+      "biography",
+      "capability",
+      "capability-recovery",
+      "capability-transfer",
+      "co-creation-with-ai",
+      "cognitive-creative-cultural-humanity",
+      "collective",
+      "collective-sensemaking",
+      "collective-stories",
+      "community",
+      "community-rights-in-generated-culture",
+      "compensation",
+      "compensation-for-creative-inputs",
+      "consent",
+      "consent-in-creative-reuse",
+      "context",
+      "convergence",
+      "craft",
+      "craft-and-expertise",
+      "creation",
+      "creative",
+      "creative-and-cultural-rights",
+      "creative-convergence",
+      "creative-dependence",
+      "creative-divergence",
+      "creative-ownership",
+      "creative-skill-development"
+    ]
+  },
+  {
+    "theme_id": "THE-08",
+    "theme": "Future Resilience & Societal Adaptation",
+    "subtopic_count": 64,
+    "high_priority_count": 64,
+    "topics": [
+      {
+        "topic_id": "TOP-001",
+        "topic": "Future Resilience",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-002",
+        "topic": "Workforce Evolution",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-003",
+        "topic": "Economic Adaptation",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-004",
+        "topic": "Organisational Evolution",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-005",
+        "topic": "Community Resilience",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-006",
+        "topic": "Futures and Scenario Planning",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-007",
+        "topic": "Human\u2013Machine Coexistence",
+        "subtopic_count": 8
+      },
+      {
+        "topic_id": "TOP-008",
+        "topic": "Ecosystem Organisations",
+        "subtopic_count": 8
+      }
+    ],
+    "grant_search_profile": {
+      "label": "Future Resilience & Societal Adaptation",
+      "queries": [
+        "societal resilience AI workforce transition future of work",
+        "ecosystem organisations shared outcomes public value",
+        "community resilience economic adaptation human-machine coexistence"
+      ],
+      "for_codes_au": [
+        "44",
+        "35",
+        "38"
+      ],
+      "horizon_clusters": [
+        "CL2",
+        "CL3",
+        "CL5"
+      ],
+      "us_agencies": [
+        "NSF",
+        "NIST",
+        "DOL"
+      ],
+      "uk_bodies": [
+        "UKRI ESRC",
+        "Innovate UK"
+      ]
+    },
+    "top_keywords": [
+      "across",
+      "adaptation",
+      "adaptive",
+      "adaptive-capacity",
+      "agency",
+      "agent",
+      "agentic",
+      "agentic-operating-models",
+      "agents",
+      "ai-driven-inequality",
+      "alternative",
+      "alternative-futures",
+      "artificial",
+      "automation",
+      "automation-dividends",
+      "autonomy",
+      "backcasting",
+      "based",
+      "basic",
+      "boundaries",
+      "broadening",
+      "capability",
+      "capability-marketplaces",
+      "capacity",
+      "civic",
+      "civic-technology",
+      "coevolution",
+      "coexistence",
+      "coexistence-norms",
+      "collaboration",
+      "community",
+      "community-intelligence",
+      "community-preparedness",
+      "community-recovery",
+      "community-resilience",
+      "composition",
+      "concentration",
+      "conflict",
+      "conflict-and-cooperation",
+      "control"
+    ]
+  }
+]

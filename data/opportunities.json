@@ -1,0 +1,589 @@
+[
+  {
+    "opportunity_id": "OPP-GC-GO8415",
+    "title": "MRFF 2026 Mental Health Research Grant Opportunity (GO8415)",
+    "funder": "MRFF / NHMRC",
+    "funder_type": "government",
+    "programme": "Million Minds Mental Health Research Mission",
+    "geography": [
+      "AU"
+    ],
+    "eligible_countries": [
+      "AU"
+    ],
+    "status": "open",
+    "open_date": "2026-05-13",
+    "close_date": "2026-09-16",
+    "value_min_aud": null,
+    "value_max_aud": null,
+    "value_total_pool_aud": null,
+    "currency_original": "AUD",
+    "value_notes": "See GrantConnect GO8415",
+    "theme_ids": [
+      "THE-05",
+      "THE-02",
+      "THE-01",
+      "THE-04"
+    ],
+    "topic_hints": [
+      "Cognitive Performance",
+      "Neurodiversity and AI",
+      "Human Performance and Wellbeing",
+      "Child Wellbeing",
+      "Family Systems"
+    ],
+    "match_rationale": "Matched themes: THE-05(5), THE-02(5), THE-01(5), THE-04(1)",
+    "win_score_seed": {
+      "eligibility_confidence": 80,
+      "strategic_fit": 90,
+      "deadline_feasibility": 60,
+      "suggested_decision": "PURSUE"
+    },
+    "source_url": "https://www.nhmrc.gov.au/funding/find-funding",
+    "application_url": "https://www.grants.gov.au/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Assign owner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "NHMRC/GrantConnect",
+    "is_pattern": false,
+    "portal": "NHMRC/GrantConnect"
+  },
+  {
+    "opportunity_id": "OPP-GC-GO8294",
+    "title": "MRFF 2026 Genomics Health Futures Grant Opportunity (GO8294)",
+    "funder": "MRFF / NHMRC",
+    "funder_type": "government",
+    "programme": "Genomics Health Futures Mission",
+    "geography": [
+      "AU"
+    ],
+    "eligible_countries": [
+      "AU"
+    ],
+    "status": "open",
+    "open_date": "2026-03-18",
+    "close_date": "2026-08-19",
+    "value_min_aud": 0,
+    "value_max_aud": 8000000,
+    "value_total_pool_aud": 74000000,
+    "currency_original": "AUD",
+    "value_notes": "Pool $74M; grants up to $8M",
+    "theme_ids": [
+      "THE-05",
+      "THE-04",
+      "THE-08"
+    ],
+    "topic_hints": [
+      "Digital Identity",
+      "Identity Sovereignty",
+      "Neural Privacy",
+      "Biological Identity",
+      "Biological Human–AI Integrity"
+    ],
+    "match_rationale": "Matched themes: THE-05(8), THE-04(5), THE-08(2)",
+    "win_score_seed": {
+      "eligibility_confidence": 80,
+      "strategic_fit": 85,
+      "deadline_feasibility": 25,
+      "suggested_decision": "WATCH"
+    },
+    "source_url": "https://www.grants.gov.au/Go/Show?GoUuid=299955cb-f9b2-4869-9544-8202113b75eb",
+    "application_url": "https://www.grants.gov.au/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      }
+    ],
+    "notes": "GrantConnect",
+    "is_pattern": false,
+    "portal": "GrantConnect"
+  },
+  {
+    "opportunity_id": "OPP-GC-GO8535",
+    "title": "MRFF/NHMRC 2025 Australia-UK Platform Studies Unmet Clinical Need (GO8535)",
+    "funder": "MRFF / NHMRC",
+    "funder_type": "government",
+    "programme": "Clinical Trials Activity Initiative",
+    "geography": [
+      "AU",
+      "UK"
+    ],
+    "eligible_countries": [
+      "AU",
+      "UK"
+    ],
+    "status": "open",
+    "open_date": "2026-07-29",
+    "close_date": "2026-08-26",
+    "value_min_aud": null,
+    "value_max_aud": null,
+    "value_total_pool_aud": null,
+    "currency_original": "AUD",
+    "value_notes": "Australia-UK platform studies",
+    "theme_ids": [
+      "THE-01",
+      "THE-05",
+      "THE-03",
+      "THE-08"
+    ],
+    "topic_hints": [
+      "Human–AI Collaboration",
+      "Platform Behaviour",
+      "Community Health"
+    ],
+    "match_rationale": "Matched themes: THE-01(3), THE-05(2), THE-03(2), THE-08(1)",
+    "win_score_seed": {
+      "eligibility_confidence": 80,
+      "strategic_fit": 90,
+      "deadline_feasibility": 25,
+      "suggested_decision": "WATCH"
+    },
+    "source_url": "https://www.grants.gov.au/",
+    "application_url": "https://www.grants.gov.au/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      }
+    ],
+    "notes": "GrantConnect",
+    "is_pattern": false,
+    "portal": "GrantConnect"
+  },
+  {
+    "opportunity_id": "OPP-GC-GO8417",
+    "title": "MRFF 2026 Early to Mid-Career Researchers Grant Opportunity (GO8417)",
+    "funder": "MRFF / NHMRC",
+    "funder_type": "government",
+    "programme": "EMCR Initiative",
+    "geography": [
+      "AU"
+    ],
+    "eligible_countries": [
+      "AU"
+    ],
+    "status": "open",
+    "open_date": "2026-05-29",
+    "close_date": "2026-08-19",
+    "value_min_aud": null,
+    "value_max_aud": null,
+    "value_total_pool_aud": null,
+    "currency_original": "AUD",
+    "value_notes": "EMCR capacity building",
+    "theme_ids": [
+      "THE-02",
+      "THE-05",
+      "THE-08"
+    ],
+    "topic_hints": [
+      "Early Intervention"
+    ],
+    "match_rationale": "Matched themes: THE-02(3), THE-05(2), THE-08(1)",
+    "win_score_seed": {
+      "eligibility_confidence": 80,
+      "strategic_fit": 85,
+      "deadline_feasibility": 25,
+      "suggested_decision": "WATCH"
+    },
+    "source_url": "https://www.nhmrc.gov.au/funding/find-funding",
+    "application_url": "https://www.grants.gov.au/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      }
+    ],
+    "notes": "GrantConnect",
+    "is_pattern": false,
+    "portal": "GrantConnect"
+  },
+  {
+    "opportunity_id": "OPP-GC-GO8540",
+    "title": "MRFF 2026 Brain Cancer Research Grant Opportunity (GO8540)",
+    "funder": "MRFF / NHMRC",
+    "funder_type": "government",
+    "programme": "Australian Brain Cancer Mission",
+    "geography": [
+      "AU"
+    ],
+    "eligible_countries": [
+      "AU"
+    ],
+    "status": "open",
+    "open_date": "2026-07-29",
+    "close_date": "2026-11-04",
+    "value_min_aud": null,
+    "value_max_aud": null,
+    "value_total_pool_aud": null,
+    "currency_original": "AUD",
+    "value_notes": "Brain cancer mission",
+    "theme_ids": [
+      "THE-05"
+    ],
+    "topic_hints": [
+      "Neural Privacy"
+    ],
+    "match_rationale": "Matched themes: THE-05(7)",
+    "win_score_seed": {
+      "eligibility_confidence": 80,
+      "strategic_fit": 75,
+      "deadline_feasibility": 80,
+      "suggested_decision": "PURSUE"
+    },
+    "source_url": "https://www.nhmrc.gov.au/funding/find-funding",
+    "application_url": "https://www.grants.gov.au/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Assign owner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "GrantConnect",
+    "is_pattern": false,
+    "portal": "GrantConnect"
+  },
+  {
+    "opportunity_id": "OPP-UKRI-XAI-2026",
+    "title": "Next generation AI: explainable AI (EPSRC / UKRI)",
+    "funder": "UKRI EPSRC",
+    "funder_type": "research_council",
+    "programme": "Next generation artificial intelligence",
+    "geography": [
+      "UK"
+    ],
+    "eligible_countries": [
+      "UK"
+    ],
+    "status": "open",
+    "open_date": "2026-08-11",
+    "close_date": "2026-10-20",
+    "value_min_aud": null,
+    "value_max_aud": 1200000,
+    "value_total_pool_aud": 24000000,
+    "currency_original": "GBP",
+    "value_notes": "Total ~£12.05M; max ~£602.5k",
+    "theme_ids": [
+      "THE-01",
+      "THE-07",
+      "THE-06",
+      "THE-05"
+    ],
+    "topic_hints": [
+      "Cognitive Performance",
+      "Human–AI Collaboration",
+      "Human Performance and Wellbeing",
+      "Human Agency",
+      "Human Augmentation"
+    ],
+    "match_rationale": "Matched themes: THE-01(13), THE-07(4), THE-06(3), THE-05(2)",
+    "win_score_seed": {
+      "eligibility_confidence": 40,
+      "strategic_fit": 90,
+      "deadline_feasibility": 80,
+      "suggested_decision": "PARTNER"
+    },
+    "source_url": "https://www.ukri.org/opportunity/next-generation-artificial-intelligence-ai-explainable-ai/",
+    "application_url": "https://www.ukri.org/opportunity/next-generation-artificial-intelligence-ai-explainable-ai/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Find partner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "UKRI",
+    "is_pattern": false,
+    "portal": "UKRI"
+  },
+  {
+    "opportunity_id": "OPP-STANFORD-HAI-2026",
+    "title": "2026 Seed Grants — Stanford Institute for Human-Centered AI",
+    "funder": "Stanford HAI",
+    "funder_type": "university",
+    "programme": "HAI Seed Grants",
+    "geography": [
+      "US"
+    ],
+    "eligible_countries": [
+      "US"
+    ],
+    "status": "open",
+    "open_date": null,
+    "close_date": "2026-08-18",
+    "value_min_aud": null,
+    "value_max_aud": 115000,
+    "value_total_pool_aud": null,
+    "currency_original": "USD",
+    "value_notes": "Up to USD 75k × ~25 awards",
+    "theme_ids": [
+      "THE-01",
+      "THE-07",
+      "THE-05",
+      "THE-04"
+    ],
+    "topic_hints": [
+      "Learning Science and Adaptive Education",
+      "Human Performance and Wellbeing",
+      "Education and Schooling",
+      "Human Agency",
+      "Human Augmentation"
+    ],
+    "match_rationale": "Matched themes: THE-01(10), THE-07(4), THE-05(4), THE-04(2)",
+    "win_score_seed": {
+      "eligibility_confidence": 35,
+      "strategic_fit": 90,
+      "deadline_feasibility": 25,
+      "suggested_decision": "PARTNER"
+    },
+    "source_url": "https://seedfunding.stanford.edu/opportunities/2026-seed-grants-stanford-institute-human-centered-ai",
+    "application_url": "https://seedfunding.stanford.edu/opportunities/2026-seed-grants-stanford-institute-human-centered-ai",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Find partner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "Stanford HAI",
+    "is_pattern": false,
+    "portal": "Stanford HAI"
+  },
+  {
+    "opportunity_id": "OPP-HE-SECUREAI-2026",
+    "title": "Horizon Europe CL3 2026 — Security Privacy Robustness of AI (SecureAI)",
+    "funder": "European Commission / ECCC",
+    "funder_type": "multilateral",
+    "programme": "Horizon Europe Cluster 3 Cybersecurity",
+    "geography": [
+      "EU"
+    ],
+    "eligible_countries": [
+      "EU",
+      "Associated"
+    ],
+    "status": "upcoming",
+    "open_date": null,
+    "close_date": "2026-09-15",
+    "value_min_aud": 5000000,
+    "value_max_aud": 7000000,
+    "value_total_pool_aud": 35000000,
+    "currency_original": "EUR",
+    "value_notes": "~EUR 21.2M topic; ~EUR 3–4M/project",
+    "theme_ids": [
+      "THE-06",
+      "THE-04",
+      "THE-03",
+      "THE-05"
+    ],
+    "topic_hints": [
+      "Social Signal Integrity",
+      "Information Quality",
+      "Digital Identity",
+      "Identity Sovereignty",
+      "Neural Privacy"
+    ],
+    "match_rationale": "Matched themes: THE-06(7), THE-04(6), THE-03(6), THE-05(4)",
+    "win_score_seed": {
+      "eligibility_confidence": 40,
+      "strategic_fit": 90,
+      "deadline_feasibility": 60,
+      "suggested_decision": "PARTNER"
+    },
+    "source_url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home",
+    "application_url": null,
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Find partner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "Funding & Tenders",
+    "is_pattern": false,
+    "portal": "Funding & Tenders"
+  },
+  {
+    "opportunity_id": "OPP-ARC-DP-PATTERN",
+    "title": "ARC Discovery Projects (ongoing pattern — DP26+)",
+    "funder": "Australian Research Council",
+    "funder_type": "government",
+    "programme": "Discovery Projects",
+    "geography": [
+      "AU"
+    ],
+    "eligible_countries": [
+      "AU"
+    ],
+    "status": "rolling",
+    "open_date": null,
+    "close_date": null,
+    "value_min_aud": 300000,
+    "value_max_aud": 900000,
+    "value_total_pool_aud": null,
+    "currency_original": "AUD",
+    "value_notes": "Typical DP ~$400k–$800k over 3 years",
+    "theme_ids": [
+      "THE-06",
+      "THE-08",
+      "THE-05",
+      "THE-01"
+    ],
+    "topic_hints": [
+      "Runtime Governance",
+      "Ethics by Design",
+      "Policy Adaptation and Governance Lag",
+      "Future Resilience",
+      "Community Resilience"
+    ],
+    "match_rationale": "Matched themes: THE-06(6), THE-08(4), THE-05(2), THE-01(2)",
+    "win_score_seed": {
+      "eligibility_confidence": 80,
+      "strategic_fit": 90,
+      "deadline_feasibility": 50,
+      "suggested_decision": "PURSUE"
+    },
+    "source_url": "https://www.arc.gov.au/",
+    "application_url": "https://www.grants.gov.au/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Assign owner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "ARC",
+    "is_pattern": true,
+    "portal": "ARC"
+  },
+  {
+    "opportunity_id": "OPP-NIH-BRAIN-PATTERN",
+    "title": "NIH BRAIN Initiative / NeuroAI coordination (pattern)",
+    "funder": "NIH",
+    "funder_type": "government",
+    "programme": "BRAIN Initiative",
+    "geography": [
+      "US",
+      "GLOBAL"
+    ],
+    "eligible_countries": [
+      "US"
+    ],
+    "status": "rolling",
+    "open_date": null,
+    "close_date": null,
+    "value_min_aud": null,
+    "value_max_aud": null,
+    "value_total_pool_aud": null,
+    "currency_original": "USD",
+    "value_notes": "Multiple FOAs; monitor NeuroAI roadmap",
+    "theme_ids": [
+      "THE-05",
+      "THE-01",
+      "THE-04",
+      "THE-02"
+    ],
+    "topic_hints": [
+      "Cognitive Performance",
+      "Learning Science and Adaptive Education",
+      "Neurotechnology and BCI",
+      "Neural Privacy",
+      "Cognitive Liberty"
+    ],
+    "match_rationale": "Matched themes: THE-05(15), THE-01(5), THE-04(1), THE-02(1)",
+    "win_score_seed": {
+      "eligibility_confidence": 40,
+      "strategic_fit": 90,
+      "deadline_feasibility": 50,
+      "suggested_decision": "PARTNER"
+    },
+    "source_url": "https://www.braininitiative.nih.gov/",
+    "application_url": "https://www.braininitiative.nih.gov/",
+    "last_verified": "2026-08-18",
+    "actions": [
+      {
+        "label": "Open portal",
+        "type": "open_portal"
+      },
+      {
+        "label": "Score WIN_SCORE",
+        "type": "score"
+      },
+      {
+        "label": "Find partner",
+        "type": "assign_owner"
+      }
+    ],
+    "notes": "NIH BRAIN",
+    "is_pattern": true,
+    "portal": "NIH BRAIN"
+  }
+]

@@ -1,0 +1,32 @@
+services:
+  atlas:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      APP_ENV: development
+      DEBUG: "true"
+      DATABASE_URL: sqlite:////app/data/atlas.db
+      TAXONOMY_INDEX_PATH: /app/data/taxonomy_grant_index.json
+      OPPORTUNITIES_SEED_PATH: /app/data/opportunities.json
+    volumes:
+      - atlas_data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/v1/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # Optional Postgres for production-like runs
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_USER: atlas
+  #     POSTGRES_PASSWORD: atlas
+  #     POSTGRES_DB: t4h_atlas
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+volumes:
+  atlas_data:

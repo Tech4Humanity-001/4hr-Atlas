@@ -1,0 +1,4 @@
+-- For Postgres, replace AUTOINCREMENT with SERIAL/GENERATED and JSON with JSONB if desired:
+-- keywords JSONB, geography JSONB, etc.
+-- BOOLEAN DEFAULT FALSE instead of 0.
+-- Run 001 as-is on SQLite; for Postgres use scripts/migrate.py which uses SQLAlchemy create_all.
