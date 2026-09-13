@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
+from app.api.runtime_routes import router as runtime_router
 from app.core.config import get_settings, validate_production_env
 from app.db.base import Base
 from app.db.session import engine
@@ -14,7 +15,6 @@ from app import models  # noqa: F401
 async def lifespan(app: FastAPI):
     issues = validate_production_env()
     if issues:
-        # Fail closed only in production
         settings = get_settings()
         if settings.is_production:
             raise RuntimeError("Production env invalid: " + "; ".join(issues))
@@ -24,11 +24,7 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     settings = get_settings()
-    app = FastAPI(
-        title=settings.app_name,
-        version="1.0.0",
-        lifespan=lifespan,
-    )
+    app = FastAPI(title=settings.app_name, version="1.0.0", lifespan=lifespan)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
@@ -37,6 +33,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(router, prefix=settings.api_prefix)
+    app.include_router(runtime_router, prefix=settings.api_prefix)
     return app
 
 

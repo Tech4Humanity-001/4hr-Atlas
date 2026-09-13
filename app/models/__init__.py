@@ -1,14 +1,15 @@
 from app.models.atlas import (
-    ControlRoomQueueItem,
-    FunderIntelligence,
-    Opportunity,
-    OpportunityTheme,
-    PartnerPipelineState,
-    Subtopic,
     Theme,
     Topic,
+    Subtopic,
+    Opportunity,
+    OpportunityTheme,
     WinScore,
+    FunderIntelligence,
+    PartnerPipelineState,
+    ControlRoomQueueItem,
 )
+from app.models.runtime import RuntimeEvent
 
 __all__ = [
     "Theme",
@@ -20,4 +21,5 @@ __all__ = [
     "FunderIntelligence",
     "PartnerPipelineState",
     "ControlRoomQueueItem",
+    "RuntimeEvent",
 ]
