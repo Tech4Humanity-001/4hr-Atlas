@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-from collections import defaultdict
 from datetime import datetime, timezone
 from uuid import uuid4
 
@@ -25,6 +24,7 @@ TRANSITIONS = {
     "RECOVERING": {"STARTED", "EXECUTING", "BLOCKED", "QUARANTINED"},
     "QUARANTINED": {"RECOVERING"},
 }
+AUTHORIZED_EVENTS = {"ACCEPT", "VALIDATE", "OUTCOME", "RECOVER", "QUARANTINE"}
 
 
 def _canonical(data: dict) -> str:
@@ -45,26 +45,37 @@ def append_event(db: Session, *, intent_id: str, actor_id: str, runtime_id: str,
                  parent_receipt: str | None = None, state_before: str | None = None) -> RuntimeEvent:
     if state_after not in STATES:
         raise ValueError(f"Unknown state: {state_after}")
+    if event not in {"INTENT", "ACCEPT", "START", "EXECUTE", "EVIDENCE", "VALIDATE", "OUTCOME", "RECOVER", "CLAIM", "BLOCK", "QUARANTINE", "TELEMETRY"}:
+        raise ValueError(f"Unknown event: {event}")
+    if event in AUTHORIZED_EVENTS and not authority_ref:
+        raise ValueError(f"Authority required for event: {event}")
     previous = _last(db, intent_id)
     before = state_before if state_before is not None else (previous.state_after if previous else None)
     if before and state_after != before and state_after not in TRANSITIONS.get(before, set()):
         raise ValueError(f"Invalid transition {before} -> {state_after}")
     if before is None and event != "INTENT":
         raise ValueError("First event must be INTENT")
-    if event not in {"INTENT", "ACCEPT", "START", "EXECUTE", "EVIDENCE", "VALIDATE", "OUTCOME", "RECOVER", "CLAIM", "BLOCK", "QUARANTINE", "TELEMETRY"}:
-        raise ValueError(f"Unknown event: {event}")
+    if previous and previous.payload.get("owner") and previous.payload.get("owner") != actor_id:
+        raise ValueError("Actor is not the current intent owner")
+    event_payload = dict(payload or {})
+    if event == "INTENT":
+        event_payload.setdefault("owner", actor_id)
+    owner = event_payload.get("owner") or (previous.payload.get("owner") if previous else actor_id)
+    if owner != actor_id and event != "TELEMETRY":
+        raise ValueError("Actor does not match intent owner")
     receipt_id = uuid4().hex
+    event_id = uuid4().hex
     timestamp = datetime.now(timezone.utc)
-    body = {"event_id": None, "intent_id": intent_id, "receipt_id": receipt_id, "actor_id": actor_id,
+    body = {"event_id": event_id, "intent_id": intent_id, "receipt_id": receipt_id, "actor_id": actor_id,
             "runtime_id": runtime_id, "model_id": model_id, "event": event, "state_before": before,
             "state_after": state_after, "timestamp": timestamp.isoformat(), "authority_ref": authority_ref,
             "parent_receipt": parent_receipt, "evidence_refs": evidence_refs or [], "provenance": provenance or {},
-            "payload": payload or {}, "replayable": True, "claim": claim}
+            "payload": event_payload, "replayable": True, "claim": claim}
     event_hash = _hash_event(previous.event_hash if previous else None, body)
-    row = RuntimeEvent(event_id=uuid4().hex, intent_id=intent_id, receipt_id=receipt_id, actor_id=actor_id,
+    row = RuntimeEvent(event_id=event_id, intent_id=intent_id, receipt_id=receipt_id, actor_id=actor_id,
         runtime_id=runtime_id, model_id=model_id, event=event, state_before=before, state_after=state_after,
         timestamp=timestamp, authority_ref=authority_ref, parent_receipt=parent_receipt,
-        evidence_refs=evidence_refs or [], provenance=provenance or {}, payload=payload or {}, replayable=True,
+        evidence_refs=evidence_refs or [], provenance=provenance or {}, payload=event_payload, replayable=True,
         previous_hash=previous.event_hash if previous else None, event_hash=event_hash, claim=claim)
     db.add(row)
     db.commit()
@@ -88,13 +99,13 @@ def record_evidence(db: Session, *, intent_id: str, actor_id: str, runtime_id: s
 
 
 def validate(db: Session, *, intent_id: str, actor_id: str, runtime_id: str, valid: bool, evidence_refs: list | None = None,
-             validation: dict | None = None) -> RuntimeEvent:
+             validation: dict | None = None, authority_ref: str | None = None) -> RuntimeEvent:
     current = _last(db, intent_id)
     if not current:
         raise ValueError("Unknown intent")
     return append_event(db, intent_id=intent_id, actor_id=actor_id, runtime_id=runtime_id, event="VALIDATE",
-                        state_after="REAL" if valid else "PARTIAL", evidence_refs=evidence_refs or current.evidence_refs,
-                        payload=validation or {"valid": valid})
+                        state_after="REAL" if valid else "PARTIAL", authority_ref=authority_ref,
+                        evidence_refs=evidence_refs or current.evidence_refs, payload=validation or {"valid": valid})
 
 
 def recover(db: Session, *, intent_id: str, actor_id: str, runtime_id: str, authority_ref: str | None = None,
@@ -123,7 +134,7 @@ def verify_ledger(db: Session, intent_id: str) -> bool:
     events = list(db.scalars(select(RuntimeEvent).where(RuntimeEvent.intent_id == intent_id).order_by(RuntimeEvent.id)))
     previous = None
     for e in events:
-        body = {"event_id": None, "intent_id": e.intent_id, "receipt_id": e.receipt_id, "actor_id": e.actor_id,
+        body = {"event_id": e.event_id, "intent_id": e.intent_id, "receipt_id": e.receipt_id, "actor_id": e.actor_id,
                 "runtime_id": e.runtime_id, "model_id": e.model_id, "event": e.event, "state_before": e.state_before,
                 "state_after": e.state_after, "timestamp": e.timestamp.isoformat(), "authority_ref": e.authority_ref,
                 "parent_receipt": e.parent_receipt, "evidence_refs": e.evidence_refs or [], "provenance": e.provenance or {},
