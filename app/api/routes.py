@@ -14,7 +14,9 @@ from app.models.atlas import (
     Theme,
     WinScore,
 )
+from app.services.atlas_action_plan import build_action_plan
 from app.services.deep_match import assign_queues, compute_win_score, deep_match_text
+from app.services.estate_context import build_estate_context
 from app.services.seed import seed_opportunities, seed_taxonomy
 
 router = APIRouter()
@@ -57,12 +59,18 @@ def health(db: Session = Depends(get_db)) -> dict[str, Any]:
     except Exception as e:
         n, o, db_ok = 0, 0, False
         return {"status": "degraded", "db": False, "error": str(e)}
-    return {
-        "status": "ok" if db_ok else "degraded",
-        "db": db_ok,
-        "themes": n,
-        "opportunities": o,
-    }
+    return {"status": "ok" if db_ok else "degraded", "db": db_ok, "themes": n, "opportunities": o}
+
+
+@router.get("/estate-context")
+def estate_context(db: Session = Depends(get_db)) -> dict[str, Any]:
+    return build_estate_context(db)
+
+
+@router.get("/action-plan")
+def action_plan(limit: int = Query(default=10, ge=1, le=100), db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Return the highest-value live opportunities and their next actions."""
+    return build_action_plan(db, limit=limit)
 
 
 @router.post("/admin/seed", dependencies=[Depends(verify_api_key)])
@@ -75,54 +83,25 @@ def admin_seed(db: Session = Depends(get_db)) -> dict[str, int]:
 @router.post("/match", response_model=MatchResponse)
 def match(req: MatchRequest, db: Session = Depends(get_db)) -> MatchResponse:
     themes = db.query(Theme).all()
-    payload = [
-        {
-            "id": t.id,
-            "keywords": t.keywords or [],
-            "search_profile": t.search_profile or {},
-            "topics": [{"name": tp.name} for tp in t.topics],
-        }
-        for t in themes
-    ]
+    payload = [{"id": t.id, "keywords": t.keywords or [], "search_profile": t.search_profile or {}, "topics": [{"name": tp.name} for tp in t.topics]} for t in themes]
     if not payload:
         raise HTTPException(400, "No themes loaded — run POST /admin/seed")
     m = deep_match_text(req.text, payload, top_n=req.top_n)
-    return MatchResponse(
-        theme_ids=m.theme_ids,
-        topic_hints=m.topic_hints,
-        scores=m.scores,
-        rationale=m.rationale,
-    )
+    return MatchResponse(theme_ids=m.theme_ids, topic_hints=m.topic_hints, scores=m.scores, rationale=m.rationale)
 
 
 @router.get("/themes")
 def list_themes(db: Session = Depends(get_db)) -> list[dict[str, Any]]:
-    out = []
-    for t in db.query(Theme).order_by(Theme.id).all():
-        out.append({
-            "id": t.id,
-            "name": t.name,
-            "subtopic_count": t.subtopic_count,
-            "high_priority_count": t.high_priority_count,
-            "topics": [{"id": tp.topic_id, "name": tp.name} for tp in t.topics],
-        })
-    return out
+    return [{"id": t.id, "name": t.name, "subtopic_count": t.subtopic_count, "high_priority_count": t.high_priority_count, "topics": [{"id": tp.topic_id, "name": tp.name} for tp in t.topics]} for t in db.query(Theme).order_by(Theme.id).all()]
 
 
 @router.get("/opportunities", response_model=list[OpportunityOut])
-def list_opportunities(
-    status: Optional[str] = None,
-    theme: Optional[str] = None,
-    decision: Optional[str] = None,
-    geo: Optional[str] = None,
-    db: Session = Depends(get_db),
-) -> list[OpportunityOut]:
+def list_opportunities(status: Optional[str] = None, theme: Optional[str] = None, decision: Optional[str] = None, geo: Optional[str] = None, db: Session = Depends(get_db)) -> list[OpportunityOut]:
     q = db.query(Opportunity)
     if status:
         q = q.filter(Opportunity.status == status)
-    rows = q.all()
-    result: list[OpportunityOut] = []
-    for o in rows:
+    result = []
+    for o in q.all():
         tids = [l.theme_id for l in sorted(o.theme_links, key=lambda x: x.rank)]
         if theme and theme not in tids:
             continue
@@ -132,21 +111,7 @@ def list_opportunities(
         sc = o.win_score.score if o.win_score else None
         if decision and dec != decision:
             continue
-        result.append(
-            OpportunityOut(
-                id=o.id,
-                title=o.title,
-                funder=o.funder,
-                status=o.status,
-                geography=o.geography or [],
-                close_date=o.close_date,
-                value_max_aud=o.value_max_aud,
-                theme_ids=tids,
-                decision=dec,
-                score=sc,
-                source_url=o.source_url,
-            )
-        )
+        result.append(OpportunityOut(id=o.id, title=o.title, funder=o.funder, status=o.status, geography=o.geography or [], close_date=o.close_date, value_max_aud=o.value_max_aud, theme_ids=tids, decision=dec, score=sc, source_url=o.source_url))
     return result
 
 
@@ -155,38 +120,7 @@ def get_opportunity(opp_id: str, db: Session = Depends(get_db)) -> dict[str, Any
     o = db.get(Opportunity, opp_id)
     if not o:
         raise HTTPException(404, "Not found")
-    return {
-        "id": o.id,
-        "title": o.title,
-        "funder": o.funder,
-        "funder_type": o.funder_type,
-        "programme": o.programme,
-        "geography": o.geography,
-        "status": o.status,
-        "open_date": o.open_date,
-        "close_date": o.close_date,
-        "value_max_aud": o.value_max_aud,
-        "value_notes": o.value_notes,
-        "theme_ids": [l.theme_id for l in sorted(o.theme_links, key=lambda x: x.rank)],
-        "topic_hints": o.topic_hints,
-        "match_rationale": o.match_rationale,
-        "win_score": {
-            "score": o.win_score.score,
-            "decision": o.win_score.decision,
-            "dimensions": o.win_score.dimensions,
-            "evidence_requirements": o.win_score.evidence_requirements,
-        } if o.win_score else None,
-        "funder_intelligence": {
-            "funder": o.funder_intel.funder,
-            "portal": o.funder_intel.portal,
-            "evaluator_language_hints": o.funder_intel.evaluator_language_hints,
-            "clarification_channel": o.funder_intel.clarification_channel,
-        } if o.funder_intel else None,
-        "partner_pipeline_stage": o.partner_state.stage if o.partner_state else None,
-        "source_url": o.source_url,
-        "application_url": o.application_url,
-        "actions": o.actions,
-    }
+    return {"id": o.id, "title": o.title, "funder": o.funder, "funder_type": o.funder_type, "programme": o.programme, "geography": o.geography, "status": o.status, "open_date": o.open_date, "close_date": o.close_date, "value_max_aud": o.value_max_aud, "value_notes": o.value_notes, "theme_ids": [l.theme_id for l in sorted(o.theme_links, key=lambda x: x.rank)], "topic_hints": o.topic_hints, "match_rationale": o.match_rationale, "win_score": {"score": o.win_score.score, "decision": o.win_score.decision, "dimensions": o.win_score.dimensions, "evidence_requirements": o.win_score.evidence_requirements} if o.win_score else None, "funder_intelligence": {"funder": o.funder_intel.funder, "portal": o.funder_intel.portal, "evaluator_language_hints": o.funder_intel.evaluator_language_hints, "clarification_channel": o.funder_intel.clarification_channel} if o.funder_intel else None, "partner_pipeline_stage": o.partner_state.stage if o.partner_state else None, "source_url": o.source_url, "application_url": o.application_url, "actions": o.actions}
 
 
 @router.post("/opportunities/{opp_id}/rescore")
@@ -195,13 +129,7 @@ def rescore(opp_id: str, db: Session = Depends(get_db)) -> dict[str, Any]:
     if not o:
         raise HTTPException(404, "Not found")
     tids = [l.theme_id for l in o.theme_links]
-    win = compute_win_score(
-        geography=o.geography or [],
-        theme_ids=tids,
-        status=o.status,
-        close_date=o.close_date,
-        funder_type=o.funder_type,
-    )
+    win = compute_win_score(geography=o.geography or [], theme_ids=tids, status=o.status, close_date=o.close_date, funder_type=o.funder_type)
     if o.win_score:
         o.win_score.score = win["score"]
         o.win_score.decision = win["decision"]
@@ -209,14 +137,7 @@ def rescore(opp_id: str, db: Session = Depends(get_db)) -> dict[str, Any]:
         o.win_score.rationale = win["rationale"]
         o.win_score.evidence_requirements = win["evidence_requirements"]
     else:
-        o.win_score = WinScore(
-            opportunity_id=o.id,
-            score=win["score"],
-            decision=win["decision"],
-            dimensions=win["dimensions"],
-            rationale=win["rationale"],
-            evidence_requirements=win["evidence_requirements"],
-        )
+        o.win_score = WinScore(opportunity_id=o.id, score=win["score"], decision=win["decision"], dimensions=win["dimensions"], rationale=win["rationale"], evidence_requirements=win["evidence_requirements"])
     db.commit()
     return win
 
@@ -228,28 +149,10 @@ def rebuild_control_room(db: Session = Depends(get_db)) -> dict[str, Any]:
     for o in db.query(Opportunity).all():
         if not o.win_score:
             continue
-        win = {
-            "decision": o.win_score.decision,
-            "score": o.win_score.score,
-            "rationale": o.win_score.rationale or {},
-            "evidence_requirements": o.win_score.evidence_requirements or [],
-        }
-        for q in assign_queues(
-            {"status": o.status, "close_date": o.close_date},
-            win,
-        ):
+        win = {"decision": o.win_score.decision, "score": o.win_score.score, "rationale": o.win_score.rationale or {}, "evidence_requirements": o.win_score.evidence_requirements or []}
+        for q in assign_queues({"status": o.status, "close_date": o.close_date}, win):
             days = (win.get("rationale") or {}).get("days_remaining")
-            db.add(
-                ControlRoomQueueItem(
-                    queue=q,
-                    opportunity_id=o.id,
-                    title=o.title,
-                    decision=o.win_score.decision,
-                    close_date=o.close_date,
-                    days_remaining=days,
-                    score=o.win_score.score,
-                )
-            )
+            db.add(ControlRoomQueueItem(queue=q, opportunity_id=o.id, title=o.title, decision=o.win_score.decision, close_date=o.close_date, days_remaining=days, score=o.win_score.score))
             summary[q] = summary.get(q, 0) + 1
     db.commit()
     return {"summary": summary}
@@ -260,12 +163,5 @@ def control_room_queues(db: Session = Depends(get_db)) -> dict[str, Any]:
     items = db.query(ControlRoomQueueItem).all()
     queues: dict[str, list] = {}
     for it in items:
-        queues.setdefault(it.queue, []).append({
-            "opportunity_id": it.opportunity_id,
-            "title": it.title,
-            "decision": it.decision,
-            "close_date": it.close_date,
-            "days_remaining": it.days_remaining,
-            "score": it.score,
-        })
+        queues.setdefault(it.queue, []).append({"opportunity_id": it.opportunity_id, "title": it.title, "decision": it.decision, "close_date": it.close_date, "days_remaining": it.days_remaining, "score": it.score})
     return {"queues": queues, "summary": {k: len(v) for k, v in queues.items()}}

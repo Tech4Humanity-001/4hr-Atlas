@@ -52,7 +52,6 @@ def _get_db():
 
 from app.db import session as sess
 from app.api import routes as routes_mod
-# Override Depends(get_db) used in routes
 app.dependency_overrides[sess.get_db] = _get_db
 
 client = TestClient(app)
@@ -65,6 +64,19 @@ def test_health():
     assert body["status"] == "ok"
     assert body["themes"] >= 1
     assert body["opportunities"] >= 1
+
+
+def test_estate_context_is_live_and_connected():
+    r = client.get("/api/v1/estate-context")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["estate_id"] == "t4h-atlas"
+    assert body["status"] == "connected"
+    assert body["truth_source"] == "live_atlas_database"
+    assert body["entry"]["required_first_read"] is True
+    assert body["live_state"]["themes"] >= 1
+    assert body["live_state"]["opportunities"] >= 1
+    assert body["generated_at"].endswith("+00:00")
 
 
 def test_list_themes():
