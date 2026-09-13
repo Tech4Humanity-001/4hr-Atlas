@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "product": "Atlas Unlimited",
+  "currency": "AUD",
+  "annual_membership": {
+    "founding": {
+      "price": 399,
+      "term": "annual",
+      "label": "Founding membership"
+    },
+    "standard": {
+      "price": 499,
+      "term": "annual",
+      "label": "Standard annual membership"
+    },
+    "team": {
+      "price": 1995,
+      "term": "annual",
+      "seats": 10,
+      "label": "Team membership · up to 10 learners"
+    }
+  },
+  "access": "Unlimited eligible Atlas learning products while membership is active.",
+  "truth_boundary": "These are commercial product definitions. Billing, enrolment and delivery are not represented as live until connected and verified."
+}
