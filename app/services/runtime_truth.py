@@ -5,7 +5,7 @@ from uuid import uuid4
 from sqlalchemy import select
 from app.models.runtime import RuntimeEvent
 STATES={"INTENDED","ACCEPTED","STARTED","EXECUTING","PARTIAL","VALIDATING","REAL","DEGRADED","BLOCKED","QUARANTINED","RECOVERING"}
-TRANSITIONS={"INTENDED":{"ACCEPTED","BLOCKED","QUARANTINED"},"ACCEPTED":{"STARTED","BLOCKED","QUARANTINED"},"STARTED":{"EXECUTING","PARTIAL","BLOCKED","QUARANTINED"},"EXECUTING":{"PARTIAL","VALIDATING","BLOCKED","QUARANTINED"},"PARTIAL":{"VALIDATING","RECOVERING","BLOCKED","QUARANTINED"},"VALIDATING":{"REAL","PARTIAL","DEGRADED","QUARANTINED"},"REAL":{"DEGRADED","RECOVERING"},"DEGRADED":{"RECOVERING","QUARANTINED"},"BLOCKED":{"RECOVERING","QUARANTINED"},"RECOVERING":{"STARTED","EXECUTING","BLOCKED","QUARANTINED"},"QUARANTINED":{"RECOVERING}}
+TRANSITIONS={"INTENDED":{"ACCEPTED","BLOCKED","QUARANTINED"},"ACCEPTED":{"STARTED","BLOCKED","QUARANTINED"},"STARTED":{"EXECUTING","PARTIAL","BLOCKED","QUARANTINED"},"EXECUTING":{"PARTIAL","VALIDATING","BLOCKED","QUARANTINED"},"PARTIAL":{"VALIDATING","RECOVERING","BLOCKED","QUARANTINED"},"VALIDATING":{"REAL","PARTIAL","DEGRADED","QUARANTINED"},"REAL":{"DEGRADED","RECOVERING"},"DEGRADED":{"RECOVERING","QUARANTINED"},"BLOCKED":{"RECOVERING","QUARANTINED"},"RECOVERING":{"STARTED","EXECUTING","BLOCKED","QUARANTINED"},"QUARANTINED":{"RECOVERING"}}
 AUTHORIZED_EVENTS={"ACCEPT","VALIDATE","OUTCOME","RECOVER","QUARANTINE"}
 EVENTS={"INTENT","ACCEPT","START","EXECUTE","EVIDENCE","VALIDATE","OUTCOME","RECOVER","CLAIM","BLOCK","QUARANTINE","TELEMETRY"}
 def _canonical(d): return json.dumps(d,sort_keys=True,separators=(",",":"),default=str)
@@ -29,7 +29,8 @@ def append_event(db:Session,*,intent_id,actor_id,runtime_id,event,state_after,mo
  if previous and previous.payload.get("owner") and previous.payload.get("owner")!=actor_id: raise ValueError("Actor is not the current intent owner")
  p=dict(payload or {})
  if event=="INTENT": p.setdefault("owner",actor_id)
- owner=p.get("owner") or (previous.payload.get("owner") if previous else actor_id)
+ elif previous: p.setdefault("owner",previous.payload.get("owner",actor_id))
+ owner=p.get("owner") or actor_id
  if owner!=actor_id and event!="TELEMETRY": raise ValueError("Actor does not match intent owner")
  ip=_intent(db,intent_id).payload if previous else p
  if event in {"START","EXECUTE"}:
