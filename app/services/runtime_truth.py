@@ -51,6 +51,8 @@ def append_event(db: Session, *, intent_id: str, actor_id: str, runtime_id: str,
         raise ValueError(f"Authority required for event: {event}")
     previous = _last(db, intent_id)
     before = state_before if state_before is not None else (previous.state_after if previous else None)
+    if previous and state_before is not None and state_before != previous.state_after:
+        raise ValueError(f"State-before mismatch: expected {previous.state_after}, got {state_before}")
     if before and state_after != before and state_after not in TRANSITIONS.get(before, set()):
         raise ValueError(f"Invalid transition {before} -> {state_after}")
     if before is None and event != "INTENT":
@@ -106,6 +108,26 @@ def validate(db: Session, *, intent_id: str, actor_id: str, runtime_id: str, val
     return append_event(db, intent_id=intent_id, actor_id=actor_id, runtime_id=runtime_id, event="VALIDATE",
                         state_after="REAL" if valid else "PARTIAL", authority_ref=authority_ref,
                         evidence_refs=evidence_refs or current.evidence_refs, payload=validation or {"valid": valid})
+
+
+def record_outcome(db: Session, *, intent_id: str, actor_id: str, runtime_id: str, outcome: dict,
+                   authority_ref: str, evidence_refs: list | None = None) -> RuntimeEvent:
+    current = _last(db, intent_id)
+    if not current:
+        raise ValueError("Unknown intent")
+    return append_event(db, intent_id=intent_id, actor_id=actor_id, runtime_id=runtime_id, event="OUTCOME",
+                        state_after=current.state_after, authority_ref=authority_ref,
+                        evidence_refs=evidence_refs or current.evidence_refs, payload=outcome)
+
+
+def record_telemetry(db: Session, *, intent_id: str, actor_id: str, runtime_id: str, telemetry: dict,
+                     state_after: str | None = None, evidence_refs: list | None = None) -> RuntimeEvent:
+    current = _last(db, intent_id)
+    if not current:
+        raise ValueError("Unknown intent")
+    target = state_after or current.state_after
+    return append_event(db, intent_id=intent_id, actor_id=actor_id, runtime_id=runtime_id, event="TELEMETRY",
+                        state_after=target, evidence_refs=evidence_refs or [], payload=telemetry)
 
 
 def recover(db: Session, *, intent_id: str, actor_id: str, runtime_id: str, authority_ref: str | None = None,
