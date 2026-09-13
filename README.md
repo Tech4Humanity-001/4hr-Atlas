@@ -2,6 +2,16 @@
 
 Production Atlas service: taxonomy deep-match, opportunities, WIN_SCORE, funder intelligence, partner pipeline, Control Room queues.
 
+## Commercial membership
+
+Atlas Unlimited uses one annual membership ladder:
+
+- **A$399/year** founding membership
+- **A$499/year** standard annual membership
+- **A$1,995/year** Team membership for up to 10 learners
+
+The pricing definition is maintained in `commercial/membership.json`. These are commercial product definitions. Billing, enrolment and delivery are not represented as live until connected and verified.
+
 ## Features
 
 - **API** (`/api/v1`): health, themes, opportunities (filterable), deep-match, rescore, control-room
