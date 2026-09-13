@@ -3,9 +3,10 @@ import hashlib,json
 from datetime import datetime,timezone
 from uuid import uuid4
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 from app.models.runtime import RuntimeEvent
 STATES={"INTENDED","ACCEPTED","STARTED","EXECUTING","PARTIAL","VALIDATING","REAL","DEGRADED","BLOCKED","QUARANTINED","RECOVERING"}
-TRANSITIONS={"INTENDED":{"ACCEPTED","BLOCKED","QUARANTINED"},"ACCEPTED":{"STARTED","BLOCKED","QUARANTINED"},"STARTED":{"EXECUTING","PARTIAL","BLOCKED","QUARANTINED"},"EXECUTING":{"PARTIAL","VALIDATING","BLOCKED","QUARANTINED"},"PARTIAL":{"VALIDATING","RECOVERING","BLOCKED","QUARANTINED"},"VALIDATING":{"REAL","PARTIAL","DEGRADED","QUARANTINED"},"REAL":{"DEGRADED","RECOVERING"},"DEGRADED":{"RECOVERING","QUARANTINED"},"BLOCKED":{"RECOVERING","QUARANTINED"},"RECOVERING":{"STARTED","EXECUTING","BLOCKED","QUARANTINED"},"QUARANTINED":{"RECOVERING"}}
+TRANSITIONS={"INTENDED":{"ACCEPTED","BLOCKED","QUARANTINED"},"ACCEPTED":{"STARTED","BLOCKED","QUARANTINED"},"STARTED":{"EXECUTING","PARTIAL","BLOCKED","QUARANTINED"},"EXECUTING":{"PARTIAL","VALIDATING","BLOCKED","QUARANTINED"},"PARTIAL":{"VALIDATING","RECOVERING","BLOCKED","QUARANTINED"},"VALIDATING":{"REAL","PARTIAL","BLOCKED","DEGRADED","QUARANTINED"},"REAL":{"DEGRADED","BLOCKED","RECOVERING"},"DEGRADED":{"REAL","BLOCKED","RECOVERING","QUARANTINED"},"BLOCKED":{"RECOVERING","QUARANTINED"},"RECOVERING":{"STARTED","EXECUTING","BLOCKED","QUARANTINED"},"QUARANTINED":{"RECOVERING"}}
 AUTHORIZED_EVENTS={"ACCEPT","VALIDATE","OUTCOME","RECOVER","QUARANTINE"}
 EVENTS={"INTENT","ACCEPT","START","EXECUTE","EVIDENCE","VALIDATE","OUTCOME","RECOVER","CLAIM","BLOCK","QUARANTINE","TELEMETRY"}
 def _canonical(d): return json.dumps(d,sort_keys=True,separators=(",",":"),default=str)
@@ -25,7 +26,6 @@ def _policy(payload,intent):
 def append_event(db:Session,*,intent_id,actor_id,runtime_id,event,state_after,model_id=None,authority_ref=None,evidence_refs=None,provenance=None,payload=None,claim=None,parent_receipt=None,state_before=None):
  if state_after not in STATES: raise ValueError(f"Unknown state: {state_after}")
  if event not in EVENTS: raise ValueError(f"Unknown event: {event}")
- if event in AUTHORIZED_EVENTS and not authority_ref: raise ValueError(f"Authority required for event: {event}")
  previous=_last(db,intent_id); before=state_before if state_before is not None else (previous.state_after if previous else None)
  if previous and state_before is not None and state_before!=previous.state_after: raise ValueError(f"State-before mismatch: expected {previous.state_after}, got {state_before}")
  if before is None and event!="INTENT": raise ValueError("First event must be INTENT")
@@ -36,15 +36,24 @@ def append_event(db:Session,*,intent_id,actor_id,runtime_id,event,state_after,mo
  owner=p.get("owner") or actor_id
  if owner!=actor_id and event!="TELEMETRY": raise ValueError("Actor does not match intent owner")
  ip=_intent(db,intent_id).payload if previous else p
+ if event in AUTHORIZED_EVENTS and not authority_ref:
+  state_after="BLOCKED";p={**p,"blocked_reason":f"Authority required for event: {event}","recovery_required":True}
+ if event=="CLAIM" and state_after in {"REAL","DEGRADED"}: raise ValueError("Claim cannot establish completion truth")
  if event in {"START","EXECUTE"}:
   reason=_policy(p,ip)
-  if reason: state_after="BLOCKED"; p={**p,"blocked_reason":reason,"recovery_required":True}
- if before and state_after!=before and state_after not in TRANSITIONS.get(before,set()): raise ValueError(f"Invalid transition {before} -> {state_after}")
+  if reason: state_after="BLOCKED";p={**p,"blocked_reason":reason,"recovery_required":True}
+ if event=="EVIDENCE" and not evidence_refs: raise ValueError("Evidence references are required")
+ if event=="VALIDATE" and not evidence_refs: raise ValueError("Validation requires evidence references")
  if event=="OUTCOME":
   dest=p.get("destination") or p.get("consumer") or ip.get("distribution")
   if not dest: raise ValueError("Outcome destination or consumer is required")
+  if not evidence_refs: raise ValueError("Outcome requires evidence references")
+  if p.get("achieved") is not True: raise ValueError("Outcome must explicitly confirm achieved=true")
   p.setdefault("destination",dest)
- receipt_id=uuid4().hex; event_id=uuid4().hex; timestamp=datetime.now(timezone.utc)
+  state_after="DEGRADED"
+ if event=="TELEMETRY": state_after="REAL" if p.get("material_change_observed") is True else "DEGRADED"
+ if before and state_after!=before and state_after not in TRANSITIONS.get(before,set()): raise ValueError(f"Invalid transition {before} -> {state_after}")
+ receipt_id=uuid4().hex;event_id=uuid4().hex;timestamp=datetime.now(timezone.utc)
  body={"event_id":event_id,"intent_id":intent_id,"receipt_id":receipt_id,"actor_id":actor_id,"runtime_id":runtime_id,"model_id":model_id,"event":event,"state_before":before,"state_after":state_after,"timestamp":_timestamp_iso(timestamp),"authority_ref":authority_ref,"parent_receipt":parent_receipt,"evidence_refs":evidence_refs or [],"provenance":provenance or {},"payload":p,"replayable":True,"claim":claim}
  row=RuntimeEvent(event_id=event_id,intent_id=intent_id,receipt_id=receipt_id,actor_id=actor_id,runtime_id=runtime_id,model_id=model_id,event=event,state_before=before,state_after=state_after,timestamp=timestamp,authority_ref=authority_ref,parent_receipt=parent_receipt,evidence_refs=evidence_refs or [],provenance=provenance or {},payload=p,replayable=True,previous_hash=previous.event_hash if previous else None,event_hash=_hash_event(previous.event_hash if previous else None,body),claim=claim)
  db.add(row);db.commit();db.refresh(row);return row
@@ -57,7 +66,7 @@ def validate(db,*,intent_id,actor_id,runtime_id,valid,evidence_refs=None,validat
  c=_last(db,intent_id)
  if not c: raise ValueError("Unknown intent")
  return append_event(db,intent_id=intent_id,actor_id=actor_id,runtime_id=runtime_id,event="VALIDATE",state_after="REAL" if valid else "PARTIAL",authority_ref=authority_ref,evidence_refs=evidence_refs or c.evidence_refs,payload=validation or {"valid":valid})
-def record_outcome(db,*,intent_id,actor_id,runtime_id,outcome,authority_ref,evidence_refs=None):
+def record_outcome(db,*,intent_id,actor_id,runtime_id,outcome,authority_ref=None,evidence_refs=None):
  c=_last(db,intent_id)
  if not c: raise ValueError("Unknown intent")
  return append_event(db,intent_id=intent_id,actor_id=actor_id,runtime_id=runtime_id,event="OUTCOME",state_after=c.state_after,authority_ref=authority_ref,evidence_refs=evidence_refs or c.evidence_refs,payload=outcome)
