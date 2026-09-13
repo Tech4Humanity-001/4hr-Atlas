@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.services.runtime_truth import append_event, create_intent, record_evidence, recover, replay, validate, verify_ledger
+from app.services.runtime_truth import append_event, create_intent, record_evidence, record_outcome, record_telemetry, recover, replay, validate, verify_ledger
 
 router = APIRouter(prefix="/runtime", tags=["runtime-truth"])
 
@@ -44,8 +44,25 @@ class ValidateIn(BaseModel):
     actor_id: str
     runtime_id: str
     valid: bool
+    authority_ref: str | None = None
     evidence_refs: list = Field(default_factory=list)
     validation: dict = Field(default_factory=dict)
+
+
+class OutcomeIn(BaseModel):
+    actor_id: str
+    runtime_id: str
+    authority_ref: str
+    outcome: dict = Field(default_factory=dict)
+    evidence_refs: list = Field(default_factory=list)
+
+
+class TelemetryIn(BaseModel):
+    actor_id: str
+    runtime_id: str
+    telemetry: dict = Field(default_factory=dict)
+    state_after: str | None = None
+    evidence_refs: list = Field(default_factory=list)
 
 
 class RecoverIn(BaseModel):
@@ -92,6 +109,24 @@ def evidence(intent_id: str, body: EvidenceIn, db: Session = Depends(get_db)):
 def validation(intent_id: str, body: ValidateIn, db: Session = Depends(get_db)):
     try:
         return _event(validate(db, intent_id=intent_id, **body.model_dump()))
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@router.post("/intents/{intent_id}/outcome")
+def outcome(intent_id: str, body: OutcomeIn, db: Session = Depends(get_db)):
+    try:
+        return _event(record_outcome(db, intent_id=intent_id, actor_id=body.actor_id, runtime_id=body.runtime_id,
+                                     authority_ref=body.authority_ref, outcome=body.outcome, evidence_refs=body.evidence_refs))
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@router.post("/intents/{intent_id}/telemetry")
+def telemetry(intent_id: str, body: TelemetryIn, db: Session = Depends(get_db)):
+    try:
+        return _event(record_telemetry(db, intent_id=intent_id, actor_id=body.actor_id, runtime_id=body.runtime_id,
+                                       telemetry=body.telemetry, state_after=body.state_after, evidence_refs=body.evidence_refs))
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
