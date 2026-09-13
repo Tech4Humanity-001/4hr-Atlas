@@ -15,6 +15,7 @@ from app.models.atlas import (
     WinScore,
 )
 from app.services.deep_match import assign_queues, compute_win_score, deep_match_text
+from app.services.estate_context import build_estate_context
 from app.services.seed import seed_opportunities, seed_taxonomy
 
 router = APIRouter()
@@ -63,6 +64,12 @@ def health(db: Session = Depends(get_db)) -> dict[str, Any]:
         "themes": n,
         "opportunities": o,
     }
+
+
+@router.get("/estate-context")
+def estate_context(db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Return the live Atlas first-read context for connected AI contexts."""
+    return build_estate_context(db)
 
 
 @router.post("/admin/seed", dependencies=[Depends(verify_api_key)])
