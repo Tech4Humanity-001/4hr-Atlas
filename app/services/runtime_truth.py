@@ -10,6 +10,9 @@ AUTHORIZED_EVENTS={"ACCEPT","VALIDATE","OUTCOME","RECOVER","QUARANTINE"}
 EVENTS={"INTENT","ACCEPT","START","EXECUTE","EVIDENCE","VALIDATE","OUTCOME","RECOVER","CLAIM","BLOCK","QUARANTINE","TELEMETRY"}
 def _canonical(d): return json.dumps(d,sort_keys=True,separators=(",",":"),default=str)
 def _hash_event(prev,data): return hashlib.sha256(((prev or "")+_canonical(data)).encode()).hexdigest()
+def _timestamp_iso(ts):
+ if ts.tzinfo is None: ts=ts.replace(tzinfo=timezone.utc)
+ return ts.astimezone(timezone.utc).isoformat()
 def _last(db,intent_id): return db.scalar(select(RuntimeEvent).where(RuntimeEvent.intent_id==intent_id).order_by(RuntimeEvent.id.desc()).limit(1))
 def _intent(db,intent_id):
  x=db.scalar(select(RuntimeEvent).where(RuntimeEvent.intent_id==intent_id).order_by(RuntimeEvent.id.asc()).limit(1))
@@ -35,15 +38,14 @@ def append_event(db:Session,*,intent_id,actor_id,runtime_id,event,state_after,mo
  ip=_intent(db,intent_id).payload if previous else p
  if event in {"START","EXECUTE"}:
   reason=_policy(p,ip)
-  if reason:
-   state_after="BLOCKED"; p={**p,"blocked_reason":reason,"recovery_required":True}
+  if reason: state_after="BLOCKED"; p={**p,"blocked_reason":reason,"recovery_required":True}
  if before and state_after!=before and state_after not in TRANSITIONS.get(before,set()): raise ValueError(f"Invalid transition {before} -> {state_after}")
  if event=="OUTCOME":
   dest=p.get("destination") or p.get("consumer") or ip.get("distribution")
   if not dest: raise ValueError("Outcome destination or consumer is required")
   p.setdefault("destination",dest)
  receipt_id=uuid4().hex; event_id=uuid4().hex; timestamp=datetime.now(timezone.utc)
- body={"event_id":event_id,"intent_id":intent_id,"receipt_id":receipt_id,"actor_id":actor_id,"runtime_id":runtime_id,"model_id":model_id,"event":event,"state_before":before,"state_after":state_after,"timestamp":timestamp.isoformat(),"authority_ref":authority_ref,"parent_receipt":parent_receipt,"evidence_refs":evidence_refs or [],"provenance":provenance or {},"payload":p,"replayable":True,"claim":claim}
+ body={"event_id":event_id,"intent_id":intent_id,"receipt_id":receipt_id,"actor_id":actor_id,"runtime_id":runtime_id,"model_id":model_id,"event":event,"state_before":before,"state_after":state_after,"timestamp":_timestamp_iso(timestamp),"authority_ref":authority_ref,"parent_receipt":parent_receipt,"evidence_refs":evidence_refs or [],"provenance":provenance or {},"payload":p,"replayable":True,"claim":claim}
  row=RuntimeEvent(event_id=event_id,intent_id=intent_id,receipt_id=receipt_id,actor_id=actor_id,runtime_id=runtime_id,model_id=model_id,event=event,state_before=before,state_after=state_after,timestamp=timestamp,authority_ref=authority_ref,parent_receipt=parent_receipt,evidence_refs=evidence_refs or [],provenance=provenance or {},payload=p,replayable=True,previous_hash=previous.event_hash if previous else None,event_hash=_hash_event(previous.event_hash if previous else None,body),claim=claim)
  db.add(row);db.commit();db.refresh(row);return row
 def create_intent(db,*,actor_id,runtime_id,intent_id=None,model_id=None,authority_ref=None,payload=None): return append_event(db,intent_id=intent_id or uuid4().hex,actor_id=actor_id,runtime_id=runtime_id,model_id=model_id,authority_ref=authority_ref,event="INTENT",state_after="INTENDED",payload=payload)
@@ -78,7 +80,7 @@ def replay(db,intent_id):
 def verify_ledger(db,intent_id):
  events=list(db.scalars(select(RuntimeEvent).where(RuntimeEvent.intent_id==intent_id).order_by(RuntimeEvent.id)));previous=None
  for e in events:
-  body={"event_id":e.event_id,"intent_id":e.intent_id,"receipt_id":e.receipt_id,"actor_id":e.actor_id,"runtime_id":e.runtime_id,"model_id":e.model_id,"event":e.event,"state_before":e.state_before,"state_after":e.state_after,"timestamp":e.timestamp.isoformat(),"authority_ref":e.authority_ref,"parent_receipt":e.parent_receipt,"evidence_refs":e.evidence_refs or [],"provenance":e.provenance or {},"payload":e.payload or {},"replayable":e.replayable,"claim":e.claim}
+  body={"event_id":e.event_id,"intent_id":e.intent_id,"receipt_id":e.receipt_id,"actor_id":e.actor_id,"runtime_id":e.runtime_id,"model_id":e.model_id,"event":e.event,"state_before":e.state_before,"state_after":e.state_after,"timestamp":_timestamp_iso(e.timestamp),"authority_ref":e.authority_ref,"parent_receipt":e.parent_receipt,"evidence_refs":e.evidence_refs or [],"provenance":e.provenance or {},"payload":e.payload or {},"replayable":e.replayable,"claim":e.claim}
   if e.previous_hash!=previous or e.event_hash!=_hash_event(previous,body): return False
   previous=e.event_hash
  return True
