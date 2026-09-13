@@ -7,6 +7,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from app.models.atlas import Opportunity
+from app.services.deep_match import compute_win_score
 
 
 def build_action_plan(db: Session, limit: int = 10) -> dict[str, Any]:
@@ -21,16 +22,32 @@ def build_action_plan(db: Session, limit: int = 10) -> dict[str, Any]:
                 days = (date.fromisoformat(o.close_date) - today).days
             except ValueError:
                 pass
-        score = o.win_score.score if o.win_score else 0
-        decision = o.win_score.decision if o.win_score else "UNSCORED"
-        if days is not None and days < 0:
+        if days is not None and days < 0 and o.status != "rolling":
             continue
+
+        theme_ids = [link.theme_id for link in o.theme_links]
+        win = compute_win_score(
+            geography=o.geography or [],
+            theme_ids=theme_ids,
+            status=o.status,
+            close_date=o.close_date,
+            funder_type=o.funder_type,
+            decision_hint=o.win_score.decision if o.win_score else None,
+        )
+        score = win["score"]
+        decision = win["decision"]
         urgency = 100 if days is not None and days <= 14 else 75 if days is not None and days <= 30 else 50
         priority = round((score * 0.65) + (urgency * 0.35), 1)
         missing = [
-            e.get("class") for e in (o.win_score.evidence_requirements or [])
-            if e.get("status") == "MISSING"
-        ] if o.win_score else ["win_score"]
+            evidence.get("class")
+            for evidence in (win.get("evidence_requirements") or [])
+            if evidence.get("status") == "MISSING"
+        ]
+        next_action = (
+            "Build submission evidence" if decision == "PURSUE"
+            else "Find/confirm partner" if decision == "PARTNER"
+            else "Review and decide"
+        )
         candidates.append({
             "opportunity_id": o.id,
             "title": o.title,
@@ -40,13 +57,14 @@ def build_action_plan(db: Session, limit: int = 10) -> dict[str, Any]:
             "days_remaining": days,
             "priority": priority,
             "missing_evidence": missing,
-            "next_action": "Build submission evidence" if decision == "PURSUE" else "Find/confirm partner" if decision == "PARTNER" else "Review and decide",
+            "next_action": next_action,
             "source_url": o.source_url,
             "application_url": o.application_url,
         })
-    candidates.sort(key=lambda x: (-x["priority"], x["days_remaining"] if x["days_remaining"] is not None else 9999))
+
+    candidates.sort(key=lambda item: (-item["priority"], item["days_remaining"] if item["days_remaining"] is not None else 9999))
     return {
-        "generated_at": date.today().isoformat(),
+        "generated_at": today.isoformat(),
         "count": min(limit, len(candidates)),
         "items": candidates[:limit],
     }
