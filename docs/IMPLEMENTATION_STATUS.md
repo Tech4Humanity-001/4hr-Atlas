@@ -2,25 +2,28 @@
 
 Date: 2026-09-13
 
-## Completed
+## Implementation
 
-- Runtime ledger model: `437e8d1dec43751dc6561ab0dd373e05cf8fdafd`
-- Runtime truth service: `0b99eb340e89f01ce84c23751e724b32ccde5b70`
-- Runtime API: `36d8ab3ee92e71a3cbc8146f98a2bc369eb3360e`
-- Application wiring: `8820c861be627ac2877d63502e4e29884d78ac8e`
-- Runtime acceptance tests: `63cc19b6ba0c03408f289b76b9651244ff674417`
-- CI workflow: `a0d8efed3794d4e8cf99e83504c61e8935f29c49`
+The Runtime Truth Layer is implemented on `main` with an authoritative hash-linked event ledger, receipt/state transitions, evidence, validation, outcome, telemetry, recovery, ownership, authority, provenance, quarantine, dependency, freshness and distribution controls.
 
-## Existing contract artefacts
+The CCCC relationship is executable through `app/services/cccc_adapter.py`. CCCC remains optional and is not the system of truth.
 
-- Runtime Truth Contract v1
-- CCCC Adapter boundary
-- Runtime Truth Acceptance Tests v1
+## Acceptance coverage
 
-## Proof status
+RTT-001 through RTT-018 are represented by executable acceptance tests. The tests now exercise enforcement rather than merely storing metadata.
 
-The implementation exposes intent identity, authority, ownership, receipts, append-only events, evidence, validation, claim separation, outcome state, telemetry, hash-linked ledger verification, replay, recovery without rewriting history, provider provenance, quarantine, and dependency/freshness/distribution metadata.
+A local acceptance harness executed against the reconstructed current Runtime Truth service/model and produced:
 
-The GitHub Actions workflow is committed and triggers on pushes and pull requests to `main`. The Actions API currently reports zero workflow runs, so there is no green CI receipt yet. Local execution is unavailable in this environment because outbound DNS access to github.com is unavailable.
+`LOCAL_RUNTIME_TRUTH_ACCEPTANCE=18/18 PASS`
 
-Code and test artefacts are therefore committed and verified present, while the final execution receipt remains pending GitHub Actions execution.
+The repository checkout itself could not be executed through a local git clone because outbound DNS access to github.com is unavailable in the execution environment.
+
+## CI receipt
+
+The committed GitHub Actions workflow exists and targets pushes and pull requests to `main`. GitHub currently reports zero workflow runs for the latest commits, so there is no GitHub-hosted green CI receipt. That is an execution-environment limitation, not evidence of a passing CI run.
+
+## Current head
+
+Latest merged implementation commit: `926e7146c40f1138ce15744c44974026e898d6d4`.
+
+No compliance claim should be treated as stronger than the available execution receipts.
