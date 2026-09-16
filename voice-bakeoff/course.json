@@ -1,0 +1,54 @@
+{
+  "course_id": "T4H-MC-T04-001",
+  "subtopic_id": "SUB-T04-001",
+  "title": "Identity Proofing",
+  "duration_minutes": 240,
+  "audience": "Policy, legal, risk and governance leaders",
+  "learning_outcome": "Evaluate identity proofing using its stated research question, evidence requirements and implementation risks.",
+  "portfolio_output": "A two-page executive action brief separating known evidence, assumptions, risks and next tests.",
+  "assessment_criterion": "Explain the construct; test the stated hypothesis; identify one confounder; select a valid measure; recommend an evidence-safe next action.",
+  "research_question": "How can identity proofing be designed and governed so that identity, consent and authority remain accurate, understandable, revocable, contestable and aligned with the person’s actual intentions?",
+  "evidence_boundary": "Working hypothesis and research material are not established findings. Unknowns include effect size, legal variation, cross-border recognition, proofing quality, accessibility, cultural expectations, adversarial adaptation, optimal assurance level and institutional adoption cost.",
+  "modules": [
+    {
+      "id": "M1",
+      "start_minute": 0,
+      "end_minute": 60,
+      "title": "Executive briefing",
+      "purpose": "Definition, why it matters and decision context.",
+      "voice_test": "Produce a clean 10-12 minute narrated lesson excerpt from the authoritative script."
+    },
+    {
+      "id": "M2",
+      "start_minute": 60,
+      "end_minute": 120,
+      "title": "Evidence lab",
+      "purpose": "Research question, hypothesis, variables and evidence requirements.",
+      "voice_test": "Produce a 10-12 minute narrated lesson excerpt with technical terminology and lists."
+    },
+    {
+      "id": "M3",
+      "start_minute": 120,
+      "end_minute": 180,
+      "title": "Applied scenario",
+      "purpose": "Evaluate risks, mitigations and stakeholder impacts in a realistic executive decision.",
+      "voice_test": "Produce a 10-12 minute scenario narration with quoted dialogue and transitions."
+    },
+    {
+      "id": "M4",
+      "start_minute": 180,
+      "end_minute": 240,
+      "title": "Action and assessment",
+      "purpose": "Create an evidence-safe implementation brief and complete the knowledge check.",
+      "voice_test": "Produce a 10-12 minute assessment narration with questions and answer pauses."
+    }
+  ],
+  "interactive_prompts": [
+    "Explain identity proofing in plain English.",
+    "What is the difference between identity, authority and consent?",
+    "What evidence would be needed to test the working hypothesis?",
+    "Quiz me on Module 2.",
+    "Give me a realistic executive scenario.",
+    "I got that wrong. Teach the concept again without giving me the answer first."
+  ]
+}
