@@ -10,6 +10,7 @@ from app.models.atlas import (
     ControlRoomQueueItem,
 )
 from app.models.runtime import RuntimeEvent
+from app.models.course import Course, CourseQuestion, LearnerProgress, CourseCredential
 
 __all__ = [
     "Theme",
@@ -22,4 +23,8 @@ __all__ = [
     "PartnerPipelineState",
     "ControlRoomQueueItem",
     "RuntimeEvent",
+    "Course",
+    "CourseQuestion",
+    "LearnerProgress",
+    "CourseCredential",
 ]
