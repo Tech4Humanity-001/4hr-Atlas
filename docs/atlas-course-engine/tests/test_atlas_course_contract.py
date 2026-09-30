@@ -9,7 +9,7 @@ import csv
 import json
 import os
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 
 
 def _find_csv():
