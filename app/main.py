@@ -9,6 +9,7 @@ from app.api.course_routes import router as course_router
 from app.core.config import get_settings, validate_production_env
 from app.db.base import Base
 from app.db.session import engine
+from app.services.course_engine import seed_courses
 from app import models  # noqa: F401
 
 
@@ -20,6 +21,14 @@ async def lifespan(app: FastAPI):
         if settings.is_production:
             raise RuntimeError("Production env invalid: " + "; ".join(issues))
     Base.metadata.create_all(bind=engine)
+    with engine.begin() as connection:
+        pass
+    from app.db.session import SessionLocal
+    db = SessionLocal()
+    try:
+        seed_courses(db)
+    finally:
+        db.close()
     yield
 
 
