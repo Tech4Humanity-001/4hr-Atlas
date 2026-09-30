@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
 from app.api.runtime_routes import router as runtime_router
+from app.api.course_routes import router as course_router
 from app.core.config import get_settings, validate_production_env
 from app.db.base import Base
 from app.db.session import engine
@@ -34,6 +35,7 @@ def create_app() -> FastAPI:
     )
     app.include_router(router, prefix=settings.api_prefix)
     app.include_router(runtime_router, prefix=settings.api_prefix)
+    app.include_router(course_router, prefix=settings.api_prefix)
     return app
 
 
