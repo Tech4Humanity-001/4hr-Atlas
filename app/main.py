@@ -5,9 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
 from app.api.runtime_routes import router as runtime_router
+from app.api.course_routes import router as course_router
 from app.core.config import get_settings, validate_production_env
 from app.db.base import Base
 from app.db.session import engine
+from app.services.course_engine import seed_courses
 from app import models  # noqa: F401
 
 
@@ -19,6 +21,12 @@ async def lifespan(app: FastAPI):
         if settings.is_production:
             raise RuntimeError("Production env invalid: " + "; ".join(issues))
     Base.metadata.create_all(bind=engine)
+    from app.db.session import SessionLocal
+    db = SessionLocal()
+    try:
+        seed_courses(db)
+    finally:
+        db.close()
     yield
 
 
@@ -34,6 +42,7 @@ def create_app() -> FastAPI:
     )
     app.include_router(router, prefix=settings.api_prefix)
     app.include_router(runtime_router, prefix=settings.api_prefix)
+    app.include_router(course_router, prefix=settings.api_prefix)
     return app
 
 
