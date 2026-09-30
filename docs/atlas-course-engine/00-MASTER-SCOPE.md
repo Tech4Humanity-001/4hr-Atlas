@@ -32,3 +32,8 @@ The implementation must be production-capable where practical, but full-run veri
 
 ## Non-negotiable evidence rule
 No status may claim TESTED, QA_APPROVED, PRODUCTION_READY or LIVE without corresponding executable evidence.
+
+
+## Verified source-discovery correction
+
+The canonical 489/516 corpus has now been directly verified in the live T4H Atlas deployment. See `docs/atlas-course-engine/10-SOURCE-DISCOVERY.md` for the evidence and reconciliation. The 516 total is reconciled as 489 canonical subtopic story records plus 27 Ground Zero study-linked stories. The 4hr-Atlas repository remains the implementation/control-plane candidate, not the assumed source CSV location.
