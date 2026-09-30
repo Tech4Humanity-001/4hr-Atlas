@@ -21,8 +21,6 @@ async def lifespan(app: FastAPI):
         if settings.is_production:
             raise RuntimeError("Production env invalid: " + "; ".join(issues))
     Base.metadata.create_all(bind=engine)
-    with engine.begin() as connection:
-        pass
     from app.db.session import SessionLocal
     db = SessionLocal()
     try:
