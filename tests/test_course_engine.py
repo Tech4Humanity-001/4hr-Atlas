@@ -65,3 +65,13 @@ def test_complete_course_vertical_slice():
     assert p.json()["score"]==100.0 and p.json()["mastery"] is True and p.json()["credential_id"]
     c=client.get("/api/v1/courses/SUB-0001/credential",params={"learner_id":learner})
     assert c.status_code==200
+
+
+def test_adaptive_next_question_changes_difficulty():
+    learner="adaptive"
+    client.post("/api/v1/courses/SUB-0001/lesson/complete",json={"learner_id":learner})
+    q=client.post("/api/v1/courses/SUB-0001/assessment/start",json={"learner_id":learner}).json()["questions"][0]
+    assert q["difficulty"]==1
+    rr=client.post("/api/v1/courses/SUB-0001/assessment/answer",json={"learner_id":learner,"question_id":q["id"],"answer":"Which support combinations improve working memory without reducing independent recall"})
+    assert rr.status_code==200
+    assert rr.json()["next_question"]["difficulty"]==2
