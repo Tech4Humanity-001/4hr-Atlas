@@ -55,8 +55,9 @@ def start_assessment(db: Session, learner_id: str, course: Course) -> dict:
     p.assessment_started=True
     db.commit()
     qs=db.query(CourseQuestion).filter_by(course_id=course.id).order_by(CourseQuestion.ordinal).all()
+    first=qs[0] if qs else None
     return {"course_id":course.id,"question_count":len(qs),
-            "questions":[{"id":q.id,"ordinal":q.ordinal,"difficulty":q.difficulty,"prompt":q.prompt,"choices":q.choices} for q in qs]}
+            "questions":[{"id":first.id,"ordinal":first.ordinal,"difficulty":first.difficulty,"prompt":first.prompt,"choices":first.choices}] if first else []}
 
 def answer_question(db: Session, learner_id: str, course: Course, question_id: str, answer: str) -> dict:
     q=db.get(CourseQuestion, question_id)
@@ -70,7 +71,14 @@ def answer_question(db: Session, learner_id: str, course: Course, question_id: s
     answered.append({"question_id":q.id,"correct":correct,"answer":answer,"difficulty":q.difficulty})
     p.answered=answered
     p.score=round(100*sum(1 for x in answered if x["correct"])/len(answered),2)
-    if len(answered)==db.query(CourseQuestion).filter_by(course_id=course.id).count():
+    total=db.query(CourseQuestion).filter_by(course_id=course.id).count()
+    next_question=None
+    if len(answered)<total:
+        answered_ids={x["question_id"] for x in answered}
+        remaining=[row for row in db.query(CourseQuestion).filter_by(course_id=course.id).all() if row.id not in answered_ids]
+        target=max(1,min(3,q.difficulty + (1 if correct else -1)))
+        next_question=min(remaining,key=lambda row:(abs(row.difficulty-target),row.ordinal))
+    if len(answered)==total:
         p.mastery=p.lesson_complete and p.score>=80
         if p.mastery and not p.credential_id:
             digest=hashlib.sha256(f"{learner_id}:{course.id}:{p.score}".encode()).hexdigest()[:24]
@@ -80,9 +88,14 @@ def answer_question(db: Session, learner_id: str, course: Course, question_id: s
                                               "lesson_complete":p.lesson_complete,"rule":"lesson_complete AND score >= 80"}))
             p.credential_id=cid
     db.commit()
-    return {"correct":correct,"score":p.score,"answered":len(answered),
-            "remaining":db.query(CourseQuestion).filter_by(course_id=course.id).count()-len(answered),
-            "mastery":p.mastery,"credential_id":p.credential_id,"explanation":q.explanation}
+    result={"correct":correct,"score":p.score,"answered":len(answered),
+            "remaining":total-len(answered),"mastery":p.mastery,"credential_id":p.credential_id,
+            "explanation":q.explanation}
+    if next_question:
+        result["next_question"]={"id":next_question.id,"ordinal":next_question.ordinal,
+                                 "difficulty":next_question.difficulty,"prompt":next_question.prompt,
+                                 "choices":next_question.choices}
+    return result
 
 def complete_lesson(db: Session, learner_id: str, course: Course) -> dict:
     p=get_or_create_progress(db, learner_id, course.id)
