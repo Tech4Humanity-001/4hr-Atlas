@@ -1,0 +1,23 @@
+requirement_id,area,requirement,source_of_truth,representation,implementation_state,test_id,evidence_required,blocking
+RQ-001,source,preserve Atlas source,Atlas,source+schema,DISCOVERED,T-DATA-001,corpus validation,false
+RQ-002,data,validate 489/516 corpus,Atlas,validator,NOT_STARTED,T-DATA-002,count+identity report,true
+RQ-003,learning,one-hour lesson lifecycle,product spec,engine,NOT_STARTED,T-E2E-001,lesson execution,true
+RQ-004,pathways,choice/dip/personalised paths,product spec,engine,NOT_STARTED,T-PATH-001,path selection trace,true
+RQ-005,content,reusable learning content,product spec,content model,NOT_STARTED,T-CONT-001,rendered content,true
+RQ-006,assets,multi-modal asset model,product spec,asset registry,NOT_STARTED,T-ASSET-001,asset lifecycle,true
+RQ-007,activities,practice/reflection/application,product spec,activity model,NOT_STARTED,T-ACT-001,activity execution,true
+RQ-008,assessment,extensible assessment types,product spec,assessment model,NOT_STARTED,T-ASSESS-001,assessment execution,true
+RQ-009,marking,marking and feedback,product spec,marking engine,NOT_STARTED,T-MARK-001,marked attempt,true
+RQ-010,mastery,mastery rules,product spec,mastery model,NOT_STARTED,T-MAST-001,mastery transition,true
+RQ-011,credential,achievement to credential,product spec,credential model,NOT_STARTED,T-CRED-001,credential test artifact,true
+RQ-012,delivery,learner delivery,product spec,delivery adapter,NOT_STARTED,T-DEL-001,delivery smoke test,true
+RQ-013,learner,lifecycle progression,product spec,event/state model,NOT_STARTED,T-LIFE-001,state trace,true
+RQ-014,measurement,learning/product outcomes,product spec,event taxonomy,NOT_STARTED,T-MEAS-001,event assertions,false
+RQ-015,provenance,source-to-output trace,governance,provenance model,NOT_STARTED,T-PROV-001,trace report,true
+RQ-016,regeneration,dependency-aware regeneration,governance,dependency graph,NOT_STARTED,T-REGEN-001,change simulation,true
+RQ-017,integration,verified adapters,repository,adapter contracts,NOT_STARTED,T-INT-001,adapter tests,false
+RQ-018,agents,resumable automation,repository,worker contract,NOT_STARTED,T-AGENT-001,restart/idempotency evidence,false
+RQ-019,qa,test coverage and gates,quality,CI/tests,NOT_STARTED,T-QA-001,all required tests,true
+RQ-020,security,secrets/privacy/production boundaries,governance,policy+tests,NOT_STARTED,T-SEC-001,secret scan+boundary tests,true
+RQ-021,status,status integrity,governance,status model,NOT_STARTED,T-STATUS-001,invalid-status rejection,true
+RQ-022,execution,complete-run discipline,this contract,execution protocol,NOT_STARTED,T-RUN-001,run evidence,true
