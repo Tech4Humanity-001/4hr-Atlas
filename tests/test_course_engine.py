@@ -37,14 +37,17 @@ def test_complete_course_vertical_slice():
     assert r.json()["question_count"]==5
     r=client.post("/api/v1/courses/SUB-0001/lesson/complete",json={"learner_id":learner}); assert r.status_code==200
     r=client.post("/api/v1/courses/SUB-0001/assessment/start",json={"learner_id":learner}); assert r.status_code==200
-    questions=r.json()["questions"]; assert len(questions)==5
-    for q in questions:
+    q=r.json()["questions"][0]; assert q["ordinal"]==1
+    for _ in range(5):
         rr=client.post("/api/v1/courses/SUB-0001/assessment/answer",json={"learner_id":learner,"question_id":q["id"],"answer":"WRONG"})
         assert rr.status_code==200
+        body=rr.json()
+        if body["remaining"]==0: break
+        q=body["next_question"]
     # A fresh learner with all correct answers proves scoring/credential persistence.
     learner="mastered"
     client.post("/api/v1/courses/SUB-0001/lesson/complete",json={"learner_id":learner})
-    questions=client.post("/api/v1/courses/SUB-0001/assessment/start",json={"learner_id":learner}).json()["questions"]
+    q=client.post("/api/v1/courses/SUB-0001/assessment/start",json={"learner_id":learner}).json()["questions"][0]
     answers={
       1:"Which support combinations improve working memory without reducing independent recall",
       2:"Context-aware cueing at task boundaries can improve multi-step accuracy while preserving unaided recall",
@@ -52,10 +55,23 @@ def test_complete_course_vertical_slice():
       4:"Controlled task experiments",
       5:"To check that learners/users can question, pause or recover from assistance and later perform without it",
     }
-    for q in questions:
+    for _ in range(5):
         rr=client.post("/api/v1/courses/SUB-0001/assessment/answer",json={"learner_id":learner,"question_id":q["id"],"answer":answers[q["ordinal"]]})
         assert rr.status_code==200
+        body=rr.json()
+        if body["remaining"]==0: break
+        q=body["next_question"]
     p=client.get("/api/v1/courses/SUB-0001/progress",params={"learner_id":learner})
     assert p.json()["score"]==100.0 and p.json()["mastery"] is True and p.json()["credential_id"]
     c=client.get("/api/v1/courses/SUB-0001/credential",params={"learner_id":learner})
     assert c.status_code==200
+
+
+def test_adaptive_next_question_changes_difficulty():
+    learner="adaptive"
+    client.post("/api/v1/courses/SUB-0001/lesson/complete",json={"learner_id":learner})
+    q=client.post("/api/v1/courses/SUB-0001/assessment/start",json={"learner_id":learner}).json()["questions"][0]
+    assert q["difficulty"]==1
+    rr=client.post("/api/v1/courses/SUB-0001/assessment/answer",json={"learner_id":learner,"question_id":q["id"],"answer":"Which support combinations improve working memory without reducing independent recall"})
+    assert rr.status_code==200
+    assert rr.json()["next_question"]["difficulty"]==2
