@@ -75,3 +75,10 @@ def test_adaptive_next_question_changes_difficulty():
     rr=client.post("/api/v1/courses/SUB-0001/assessment/answer",json={"learner_id":learner,"question_id":q["id"],"answer":"Which support combinations improve working memory without reducing independent recall"})
     assert rr.status_code==200
     assert rr.json()["next_question"]["difficulty"]==2
+
+
+def test_course_learner_ui_route():
+    r=client.get("/course/SUB-0001")
+    assert r.status_code==200
+    assert "Working Memory Optimisation" in r.text
+    assert "/api/v1/courses/SUB-0001/assessment/start" in r.text
