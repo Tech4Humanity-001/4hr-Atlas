@@ -14,7 +14,7 @@ os.environ["OPPORTUNITIES_SEED_PATH"] = str(ROOT / "data" / "opportunities.json"
 from app.core.config import get_settings
 get_settings.cache_clear()
 
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -51,8 +51,6 @@ def _get_db():
 
 
 from app.db import session as sess
-from app.api import routes as routes_mod
-# Override Depends(get_db) used in routes
 app.dependency_overrides[sess.get_db] = _get_db
 
 client = TestClient(app)
@@ -65,6 +63,32 @@ def test_health():
     assert body["status"] == "ok"
     assert body["themes"] >= 1
     assert body["opportunities"] >= 1
+
+
+def test_estate_context_is_live_and_connected():
+    r = client.get("/api/v1/estate-context")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["estate_id"] == "t4h-atlas"
+    assert body["status"] == "connected"
+    assert body["truth_source"] == "live_atlas_database"
+    assert body["entry"]["required_first_read"] is True
+    assert body["live_state"]["themes"] >= 1
+    assert body["live_state"]["opportunities"] >= 1
+    assert body["generated_at"].endswith("+00:00")
+
+
+def test_action_plan_is_live_and_prioritized():
+    r = client.get("/api/v1/action-plan", params={"limit": 10})
+    assert r.status_code == 200
+    body = r.json()
+    assert "generated_at" in body
+    assert body["count"] == len(body["items"])
+    if body["items"]:
+        item = body["items"][0]
+        assert "opportunity_id" in item
+        assert "priority" in item
+        assert "next_action" in item
 
 
 def test_list_themes():
@@ -93,3 +117,4 @@ def test_control_room_rebuild():
     assert "summary" in r.json()
     r2 = client.get("/api/v1/control-room/queues")
     assert r2.status_code == 200
+    assert "queues" in r2.json()

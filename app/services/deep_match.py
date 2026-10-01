@@ -6,7 +6,7 @@ from datetime import date
 from typing import Any, Optional
 
 
-TODAY = date(2026, 8, 18)
+TODAY = date.today()
 
 WIN_DIMENSION_KEYS = [
     "eligibility_confidence",
