@@ -46,6 +46,17 @@ class LearnerProgress(Base):
     credential_id: Mapped[Optional[str]] = mapped_column(String(128))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
+class CourseLearnerState(Base):
+    """Persisted learner state that is orthogonal to question responses."""
+    __tablename__ = "course_learner_state"
+    __table_args__ = (UniqueConstraint("learner_id", "course_id", name="uq_course_learner_state"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    learner_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    course_id: Mapped[str] = mapped_column(String(64), ForeignKey("courses.id", ondelete="CASCADE"), nullable=False, index=True)
+    activity_complete: Mapped[bool] = mapped_column(default=False)
+    remediation_seen: Mapped[list] = mapped_column(JSON, default=list)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
 class CourseCredential(Base):
     __tablename__ = "course_credentials"
     id: Mapped[str] = mapped_column(String(128), primary_key=True)
