@@ -1,0 +1,54 @@
+{
+  "run_id": "",
+  "course_id": "T4H-MC-T04-001",
+  "started_at": "",
+  "host": {
+    "os": "",
+    "cpu": "",
+    "memory_gb": 0,
+    "gpu": ""
+  },
+  "candidates": {
+    "voicestudio": {
+      "status": "NOT_RUN",
+      "endpoint": "",
+      "engine": "",
+      "module_results": [],
+      "manual_interventions": 0,
+      "notes": ""
+    },
+    "voicebox": {
+      "status": "NOT_RUN",
+      "endpoint": "",
+      "engine": "",
+      "module_results": [],
+      "manual_interventions": 0,
+      "notes": ""
+    },
+    "pipecat_phonellm": {
+      "status": "NOT_RUN",
+      "endpoint": "",
+      "model": "",
+      "interaction_results": [],
+      "tool_call_results": [],
+      "manual_interventions": 0,
+      "notes": ""
+    }
+  },
+  "metrics": {
+    "generation_wall_seconds": null,
+    "real_time_factor": null,
+    "first_response_seconds": null,
+    "tool_call_latency_ms": null,
+    "successful_outputs": 0,
+    "failed_outputs": 0,
+    "manual_interventions": null,
+    "cost_aud": null
+  },
+  "truth_state": "PARTIAL",
+  "receipt": {
+    "artifacts": [],
+    "logs": [],
+    "checksums": []
+  }
+}

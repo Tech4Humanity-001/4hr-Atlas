@@ -1,0 +1,26 @@
+{
+  "course_id": "T4H-MC-T04-001",
+  "note": "Benchmark excerpts derived from the canonical Atlas course specification and evidence-safe research register. These are test passages, not a claim that the full four-hour lesson script is already production-ready.",
+  "passages": [
+    {
+      "id": "M1",
+      "title": "Executive briefing",
+      "text": "Identity proofing concerns how a person establishes and exercises control in a digital environment. For this course, the decision context includes identity, authority, purpose, consent, execution, evidence, revocation and recovery. The learning task is not to assume that a proposed approach works. It is to frame the decision, identify what is known, identify what remains uncertain, and determine what should be tested next. The course therefore treats source statements as research seeds rather than established findings. A useful executive output is a short action brief that separates evidence, assumptions, risks and next tests."
+    },
+    {
+      "id": "M2",
+      "title": "Evidence lab",
+      "text": "The research question for Identity Proofing is: how can identity proofing be designed and governed so that identity, consent and authority remain accurate, understandable, revocable, contestable and aligned with a person's actual intentions? The working hypothesis is a testable proposition, not a proven result. Testing it requires a defined method, appropriate variables and evidence requirements. Candidate methods include policy and standards analysis, consent-flow mapping, identity and access-control testing, user research, threat modelling, adversarial simulation, usability and comprehension testing, audit-log analysis and rights-impact assessment."
+    },
+    {
+      "id": "M3",
+      "title": "Applied scenario",
+      "text": "In an executive decision, do not treat an attractive control as sufficient evidence. Ask what the control is intended to establish, what authority it creates or constrains, what happens when circumstances change, and how a person can challenge or recover from an incorrect decision. Relevant unknowns include legal variation, cross-border recognition, proofing quality, accessibility, cultural expectations, adversarial adaptation and the institutional cost of adoption. The scenario exercise asks the learner to identify risks, mitigations and stakeholder impacts, then choose an evidence-safe next action."
+    },
+    {
+      "id": "M4",
+      "title": "Action and assessment",
+      "text": "The final output is a two-page executive action brief for Identity Proofing. It should separate known evidence from assumptions, identify material risks, identify at least one confounder, select a valid measure, and recommend an evidence-safe next test or implementation action. The learner then completes a knowledge check. A strong response is not the one that sounds most certain. It is the one that makes the evidence boundary clear, identifies what must still be learned, and connects the proposed action to a measurable outcome."
+    }
+  ]
+}
