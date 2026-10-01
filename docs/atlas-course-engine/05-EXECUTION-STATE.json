@@ -1,0 +1,19 @@
+{
+  "contract_version": "1.0",
+  "mode": "full-run",
+  "current_phase": "RECONNAISSANCE",
+  "status": "NOT_STARTED",
+  "completed_requirements": [],
+  "in_progress_requirements": [],
+  "blocked_requirements": [],
+  "failed_requirements": [],
+  "verified_requirements": [],
+  "last_verified_commit": null,
+  "last_test_run": null,
+  "evidence": [],
+  "next_actions": [
+    "Inspect actual repository and locate canonical Atlas/course-engine data",
+    "Reconcile implementation matrix with repository reality",
+    "Execute dependency-ordered implementation"
+  ]
+}
