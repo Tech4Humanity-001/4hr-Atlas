@@ -1,13 +1,20 @@
-"""Course engine: reusable, idempotent vertical slice."""
+"""Reusable Atlas course engine with a persisted learner vertical slice."""
 from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
 from sqlalchemy.orm import Session
 from app.core.config import ROOT
-from app.models.course import Course, CourseCredential, CourseQuestion, LearnerProgress
+from app.models.course import Course, CourseCredential, CourseLearnerState, CourseQuestion, LearnerProgress
 
 SEED_PATH = ROOT / "data" / "course_seed.json"
+
+def _seed_item(subtopic_id: str) -> dict:
+    payload = json.loads(SEED_PATH.read_text(encoding="utf-8"))
+    try:
+        return next(item for item in payload if item["subtopic_id"] == subtopic_id)
+    except StopIteration as exc:
+        raise ValueError(f"No course content for {subtopic_id}") from exc
 
 def seed_courses(db: Session) -> int:
     payload = json.loads(SEED_PATH.read_text(encoding="utf-8"))
@@ -44,19 +51,50 @@ def get_or_create_progress(db: Session, learner_id: str, course_id: str) -> Lear
         db.add(p); db.flush()
     return p
 
+def get_or_create_state(db: Session, learner_id: str, course_id: str) -> CourseLearnerState:
+    state=db.query(CourseLearnerState).filter_by(learner_id=learner_id, course_id=course_id).one_or_none()
+    if not state:
+        state=CourseLearnerState(learner_id=learner_id, course_id=course_id, remediation_seen=[])
+        db.add(state); db.flush()
+    return state
+
 def course_payload(db: Session, course: Course) -> dict:
     qs=db.query(CourseQuestion).filter_by(course_id=course.id).order_by(CourseQuestion.ordinal).all()
+    item=_seed_item(course.subtopic_id)
     return {"id":course.id,"subtopic_id":course.subtopic_id,"theme_id":course.theme_id,"topic_id":course.topic_id,
             "title":course.title,"intro":course.intro,"lesson":course.lesson,"source_url":course.source_url,
-            "question_count":len(qs),"status":"READY"}
+            "activity":item.get("activity",{}),"question_count":len(qs),"status":"READY"}
+
+def complete_activity(db: Session, learner_id: str, course: Course) -> dict:
+    state=get_or_create_state(db, learner_id, course.id)
+    state.activity_complete=True
+    db.commit()
+    return {"course_id":course.id,"learner_id":learner_id,"activity_complete":True}
+
+def complete_remediation(db: Session, learner_id: str, course: Course, question_id: str) -> dict:
+    q=db.get(CourseQuestion, question_id)
+    if not q or q.course_id != course.id:
+        raise ValueError("Unknown course question")
+    state=get_or_create_state(db, learner_id, course.id)
+    seen=list(state.remediation_seen or [])
+    if question_id not in seen:
+        seen.append(question_id)
+        state.remediation_seen=seen
+    db.commit()
+    return {"course_id":course.id,"learner_id":learner_id,"question_id":question_id,"remediation_seen":True}
 
 def start_assessment(db: Session, learner_id: str, course: Course) -> dict:
+    state=get_or_create_state(db, learner_id, course.id)
+    if not state.activity_complete:
+        raise ValueError("Complete the practice activity before starting the assessment")
     p=get_or_create_progress(db, learner_id, course.id)
     p.assessment_started=True
     db.commit()
     qs=db.query(CourseQuestion).filter_by(course_id=course.id).order_by(CourseQuestion.ordinal).all()
-    first=qs[0] if qs else None
-    return {"course_id":course.id,"question_count":len(qs),
+    answered_ids={x["question_id"] for x in (p.answered or [])}
+    remaining=[q for q in qs if q.id not in answered_ids]
+    first=remaining[0] if remaining else None
+    return {"course_id":course.id,"question_count":len(qs),"answered":len(answered_ids),
             "questions":[{"id":first.id,"ordinal":first.ordinal,"difficulty":first.difficulty,"prompt":first.prompt,"choices":first.choices}] if first else []}
 
 def answer_question(db: Session, learner_id: str, course: Course, question_id: str, answer: str) -> dict:
@@ -64,6 +102,8 @@ def answer_question(db: Session, learner_id: str, course: Course, question_id: s
     if not q or q.course_id != course.id:
         raise ValueError("Unknown course question")
     p=get_or_create_progress(db, learner_id, course.id)
+    if not p.lesson_complete:
+        raise ValueError("Complete the lesson before answering the assessment")
     answered=list(p.answered or [])
     if any(x["question_id"]==q.id for x in answered):
         raise ValueError("Question already answered")
@@ -85,12 +125,14 @@ def answer_question(db: Session, learner_id: str, course: Course, question_id: s
             cid=f"ATL-CRED-{digest.upper()}"
             db.add(CourseCredential(id=cid,learner_id=learner_id,course_id=course.id,score=p.score,
                                     evidence={"questions":len(answered),"correct":sum(x["correct"] for x in answered),
-                                              "lesson_complete":p.lesson_complete,"rule":"lesson_complete AND score >= 80"}))
+                                              "lesson_complete":p.lesson_complete,"activity_complete":get_or_create_state(db, learner_id, course.id).activity_complete,
+                                              "rule":"lesson_complete AND activity_complete AND score >= 80"}))
             p.credential_id=cid
     db.commit()
-    result={"correct":correct,"score":p.score,"answered":len(answered),
-            "remaining":total-len(answered),"mastery":p.mastery,"credential_id":p.credential_id,
-            "explanation":q.explanation}
+    result={"correct":correct,"score":p.score,"answered":len(answered),"remaining":total-len(answered),
+            "mastery":p.mastery,"credential_id":p.credential_id,"explanation":q.explanation,
+            "remediation":{"required":not correct,"question_id":q.id,
+                           "instruction":f"Review the lesson section relevant to this question. {q.explanation}"}}
     if next_question:
         result["next_question"]={"id":next_question.id,"ordinal":next_question.ordinal,
                                  "difficulty":next_question.difficulty,"prompt":next_question.prompt,
